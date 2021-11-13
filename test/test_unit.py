@@ -42,3 +42,19 @@ def test_no_label_or_symbol():
     unit = { "id" : "http://example.com/my_unit" }
     with pytest.raises(ValidationError):
         VALIDATOR.validate(unit)
+
+
+def test_unit_with_typed_symbol_missing_type():
+    ''' Invalid: typed symbol must have "type" property '''
+
+    unit = { "symbol" : { "value" : "Cel" } }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(unit)
+
+
+def test_unit_with_typed_symbol_missing_value():
+    ''' Invalid: typed symbol must have "label" property '''
+
+    unit = { "symbol" : { "type" : "http://www.opengis.net/def/uom/UCUM/" } }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(unit)

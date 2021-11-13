@@ -17,7 +17,7 @@ def test_valid_i18n_object():
 
 def test_invalid_i18n_object():
     ''' Tests an example of an invalid i18n object '''
-    
+
     invalid_i18n = { "en" : { "de" : "Fisch" } }
     with pytest.raises(ValidationError):
         VALIDATOR.validate(invalid_i18n)
