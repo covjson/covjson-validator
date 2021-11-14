@@ -27,7 +27,7 @@ def test_continuous_observed_property():
 
 
 def test_categorical_observed_property():
-    ''' Tests an observedProperty for continuous data '''
+    ''' Tests an observedProperty for categorical data '''
 
     op = {
         "id" : "http://example.com/land_cover",
