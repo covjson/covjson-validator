@@ -1,0 +1,66 @@
+{
+    "$id": "/schemas/referenceSystem",
+    "type" : "object",
+    "properties" : { "type" : { "type" : "string" } },
+    "required" : [ "type" ],
+    "if" :
+    {
+        "properties" : { "type" : { "const" : "TemporalRS" } }
+    },
+    "then" :
+    {
+        "description" : "A temporal reference system",
+        "properties" :
+        {
+            "calendar" : { "type" : "string" } ,
+            "timeScale" : { "type" : "string" }
+        },
+        "required" : [ "calendar" ]
+    },
+    "else" :
+    {
+        "if" :
+        {
+            "properties" : { "type" : { "const" : "IdentifierRS" } }
+        },
+        "then" :
+        {
+            "description" : "An identifier-based reference system",
+            "properties" :
+            {
+                "id" : { "type" : "string" },
+                "label" : { "$ref" : "/schemas/i18n" },
+                "description" : { "$ref" : "/schemas/i18n" },
+                "targetConcept" : { "$ref" : "#/$defs/targetConcept" },
+                "identifiers" :
+                {
+                    "type" : "object",
+                    "patternProperties" :
+                    {
+                        ".+" : { "$ref" : "#/$defs/targetConcept" }
+                    }
+                }
+            },
+           "required" : [ "targetConcept" ]
+        },
+        "else" :
+        {
+            "description" : "Another type of reference system (e.g. geographic, vertical, projected)",
+            "properties" : { "id" : { "type" : "string" } }
+        }
+    },
+    "$defs" :
+    {
+        "targetConcept" :
+        {
+            "type" : "object",
+            "properties" :
+            {
+                "id" : { "type" : "string" },
+                "label" : { "$ref" : "/schemas/i18n" },
+                "description" : { "$ref" : "/schemas/i18n" }
+            },
+            "required" : [ "label" ]
+        }
+    }
+}
