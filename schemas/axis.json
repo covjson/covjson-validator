@@ -26,16 +26,56 @@
                 "values" :
                 {
                     "type" : "array",
-                    "minItems" : 1
+                    "minItems" : 1,
+                    "uniqueItems" : true
                 },
                 "bounds" :
                 {
+                    "description" : "Optional axis bounds. Must be twice as long (and same data type) as \"values\"",
                     "type" : "array",
-                    "minItems" : 2
-                }
+                    "minItems" : 2,
+                    "uniqueItems" : true
+                },
+                "dataType" : { "type" : "string" }
             },
             "required" : [ "values" ],
-            "not" : { "required" : [ "start", "stop", "num" ] }
+            "not" : { "required" : [ "start", "stop", "num" ] },
+            "if" :
+            {
+                "required" : [ "dataType" ]
+            },
+            "then" :
+            {
+                "description" : "dataType property is present",
+                "oneOf" :
+                [
+                    {
+                        "description" : "Axis values are tuples",
+                        "properties" :
+                        {
+                            "dataType" : { "const" : "tuple" },
+                            "values" : { "contains" : { "type" : "array" } }
+                        }
+                    },
+                    {
+                        "description" : "Axis values are polygons",
+                        "properties" :
+                        {
+                            "dataType" : { "const" : "polygon" },
+                            "values" : { "contains" : { "type" : "array" } }
+                        }
+                    }
+                ]
+            },
+            "else" :
+            {
+                "description" : "dataType is not present: must be primitive (numbers or strings)",
+                "oneOf" :
+                [
+                    { "properties" : { "values" : { "contains" : { "type" : "number" } } } },
+                    { "properties" : { "values" : { "contains" : { "type" : "string" } } } }
+                ]
+            }
         }
     ]
 }
