@@ -1,0 +1,41 @@
+{
+    "$id": "/schemas/axis",
+    "type" : "object",
+    "description" : "Represents an axis within a domain",
+    "oneOf" :
+    [
+        {
+            "description" : "A regularly-spaced numeric axis",
+            "properties" :
+            {
+                "start" : { "type" : "number" },
+                "stop" : { "type" : "number" },
+                "num" :
+                {
+                    "type" : "integer",
+                    "minimum" : 1
+                }
+            },
+            "required" : [ "start", "stop", "num" ],
+            "not" : { "required" : [ "values" ] }
+        },
+        {
+            "description" : "An axis based on an array of axis values",
+            "properties" :
+            {
+                "values" :
+                {
+                    "type" : "array",
+                    "minItems" : 1
+                },
+                "bounds" :
+                {
+                    "type" : "array",
+                    "minItems" : 2
+                }
+            },
+            "required" : [ "values" ],
+            "not" : { "required" : [ "start", "stop", "num" ] }
+        }
+    ]
+}
