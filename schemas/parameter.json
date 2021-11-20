@@ -7,9 +7,8 @@
         "id": { "type": "string" },
         "type":
         {
-            "type": "string",
             "description": "Type of the parameter object, must be \"Parameter\"",
-            "enum": [ "Parameter" ]
+            "const": "Parameter"
         },
         "description": { "$ref" : "/schemas/i18n" },
         "observedProperty": { "$ref" : "/schemas/observedProperty" },
