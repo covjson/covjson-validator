@@ -22,6 +22,35 @@ def test_axis_with_number_array():
     VALIDATOR.validate(axis)
 
 
+def test_time_axis():
+    ''' Tests a minimal example of a valid axis made of an array of time values '''
+
+    axis = { "values" : ["2001-01-01T00:00:00Z", "2001-01-02T00:00:00Z", "2001-01-03T00:00:00Z"] }
+    VALIDATOR.validate(axis)
+
+
+def test_axis_with_bounds():
+    ''' Tests an axis that has a bounds array '''
+
+    axis = {
+        "values": [20, 21],
+        "bounds": [19.5, 20.5, 20.5, 21.5]
+    }
+    VALIDATOR.validate(axis)
+
+
+def test_time_axis_with_bounds():
+    ''' Tests a minimal example of a valid axis made of an array of time values,
+        with a bounds array '''
+
+    axis = {
+        "values" : ["2001-01-01T12:00:00Z", "2001-01-02T12:00:00Z"],
+        "bounds" : ["2001-01-01T00:00:00Z", "2001-01-02T00:00:00Z",
+                    "2001-01-02T00:00:00Z", "2001-01-03T00:00:00Z"]
+    }
+    VALIDATOR.validate(axis)
+
+
 def test_primitive_axis_with_data_type():
     ''' Tests a minimal example of a valid axis made of an array of values,
         with declaration of primitive data type '''
@@ -144,6 +173,17 @@ def test_nonunique_values_array():
         VALIDATOR.validate(axis)
 
 
+def test_axis_with_inconsistent_bounds_type():
+    ''' Tests an axis that has a bounds array but of the wrong type '''
+
+    axis = {
+        "values": [20, 21],
+        "bounds": ["19.5", "20.5", "20.5", "21.5"]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
 def test_invalid_tuples_axis():
     ''' Invalid: type of values inconsistent with dataType (tuple) '''
 
@@ -156,6 +196,35 @@ def test_invalid_tuples_axis():
         VALIDATOR.validate(axis)
 
 
+def test_tuples_axis_missing_coordinates():
+    ''' Invalid tuples axis: "coordinates" is missing '''
+
+    axis = {
+        "dataType": "tuple",
+        "values": [
+            ["2008-01-01T04:00:00Z", 1, 20],
+            ["2008-01-01T04:30:00Z", 2, 21]
+        ]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
+def test_tuples_axis_empty_coordinates():
+    ''' Invalid tuples axis: "coordinates" is empty '''
+
+    axis = {
+        "dataType": "tuple",
+        "coordinates": [],
+        "values": [
+            ["2008-01-01T04:00:00Z", 1, 20],
+            ["2008-01-01T04:30:00Z", 2, 21]
+        ]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
 def test_invalid_polygons_axis():
     ''' Invalid: type of values inconsistent with dataType (polygon) '''
 
@@ -163,6 +232,19 @@ def test_invalid_polygons_axis():
         "dataType": "polygon",
         "coordinates": ["x", "y"],
         "values": [1, 2, 3, 4, 5]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
+def test_polygon_axis_missing_coordinates():
+    ''' Invalid polygon axis: "coordinates" is missing '''
+
+    axis = {
+        "dataType": "polygon",
+        "values": [
+            [ [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ]  ]
+        ]
     }
     with pytest.raises(ValidationError):
         VALIDATOR.validate(axis)

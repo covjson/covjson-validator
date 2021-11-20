@@ -21,17 +21,22 @@
         {
             "description" : "Optional axis bounds. Must be twice as long (and same data type) as \"values\"",
             "type" : "array",
-            "minItems" : 2,
-            "uniqueItems" : true
+            "minItems" : 2
         },
-        "dataType" : { "type" : "string" }
+        "dataType" : { "type" : "string" },
+        "coordinates" :
+        {
+            "type" : "array",
+            "contains" : { "type" : "string" },
+            "minItems" : 1
+        }
     },
     "oneOf" :
     [
         {
             "description" : "A regularly-spaced numeric axis",
             "required" : [ "start", "stop", "num" ],
-            "not" : { "required" : [ "values" ] }
+            "not" : { "required" : [ "values", "coordinates", "bounds" ] }
         },
         {
             "description" : "Polygon or tuple-based axis",
@@ -40,8 +45,8 @@
                 "dataType" : { "enum" : [ "tuple", "polygon" ] },
                 "values" : { "contains" : { "type" : "array" } }
             },
-            "required" : [ "dataType", "values" ],
-            "not" : { "required" : [ "start", "stop", "num" ] }
+            "required" : [ "dataType", "values", "coordinates" ],
+            "not" : { "required" : [ "start", "stop", "num", "bounds" ] }
         },
         {
             "description" : "Values-based axis with primitive values (numbers or strings)",
@@ -51,11 +56,23 @@
             },
             "oneOf" :
             [
-                { "properties" : { "values" : { "contains" : { "type" : "number" } } } },
-                { "properties" : { "values" : { "contains" : { "type" : "string" } } } }
+                {
+                    "properties" :
+                    {
+                        "values" : { "contains" : { "type" : "number" } },
+                        "bounds" : { "contains" : { "type" : "number" } }
+                    } 
+                },
+                { 
+                    "properties" :
+                    {
+                        "values" : { "contains" : { "type" : "string" } },
+                        "bounds" : { "contains" : { "type" : "string" } }
+                    }
+                }
             ],
             "required" : [ "values" ],
-            "not" : { "required" : [ "start", "stop", "num" ] }
+            "not" : { "required" : [ "start", "stop", "num", "coordinates" ] }
         }
     ]
 }
