@@ -2,80 +2,60 @@
     "$id": "/schemas/axis",
     "type" : "object",
     "description" : "Represents an axis within a domain",
+    "properties" :
+    {
+        "start" : { "type" : "number" },
+        "stop" : { "type" : "number" },
+        "num" :
+        {
+            "type" : "integer",
+            "minimum" : 1
+        },
+        "values" :
+        {
+            "type" : "array",
+            "minItems" : 1,
+            "uniqueItems" : true
+        },
+        "bounds" :
+        {
+            "description" : "Optional axis bounds. Must be twice as long (and same data type) as \"values\"",
+            "type" : "array",
+            "minItems" : 2,
+            "uniqueItems" : true
+        },
+        "dataType" : { "type" : "string" }
+    },
     "oneOf" :
     [
         {
             "description" : "A regularly-spaced numeric axis",
-            "properties" :
-            {
-                "start" : { "type" : "number" },
-                "stop" : { "type" : "number" },
-                "num" :
-                {
-                    "type" : "integer",
-                    "minimum" : 1
-                }
-            },
             "required" : [ "start", "stop", "num" ],
             "not" : { "required" : [ "values" ] }
         },
         {
-            "description" : "An axis based on an array of axis values",
+            "description" : "Polygon or tuple-based axis",
             "properties" :
             {
-                "values" :
-                {
-                    "type" : "array",
-                    "minItems" : 1,
-                    "uniqueItems" : true
-                },
-                "bounds" :
-                {
-                    "description" : "Optional axis bounds. Must be twice as long (and same data type) as \"values\"",
-                    "type" : "array",
-                    "minItems" : 2,
-                    "uniqueItems" : true
-                },
-                "dataType" : { "type" : "string" }
+                "dataType" : { "enum" : [ "tuple", "polygon" ] },
+                "values" : { "contains" : { "type" : "array" } }
             },
+            "required" : [ "dataType", "values" ],
+            "not" : { "required" : [ "start", "stop", "num" ] }
+        },
+        {
+            "description" : "Values-based axis with primitive values (numbers or strings)",
+            "properties" :
+            {
+                "dataType" : { "const" : "primitive" }
+            },
+            "oneOf" :
+            [
+                { "properties" : { "values" : { "contains" : { "type" : "number" } } } },
+                { "properties" : { "values" : { "contains" : { "type" : "string" } } } }
+            ],
             "required" : [ "values" ],
-            "not" : { "required" : [ "start", "stop", "num" ] },
-            "if" :
-            {
-                "required" : [ "dataType" ]
-            },
-            "then" :
-            {
-                "description" : "dataType property is present",
-                "oneOf" :
-                [
-                    {
-                        "description" : "Axis values are tuples",
-                        "properties" :
-                        {
-                            "dataType" : { "const" : "tuple" },
-                            "values" : { "contains" : { "type" : "array" } }
-                        }
-                    },
-                    {
-                        "description" : "Axis values are polygons",
-                        "properties" :
-                        {
-                            "dataType" : { "const" : "polygon" },
-                            "values" : { "contains" : { "type" : "array" } }
-                        }
-                    }
-                ]
-            },
-            "else" :
-            {
-                "description" : "dataType is not present: must be primitive (numbers or strings)",
-                "oneOf" :
-                [
-                    { "properties" : { "values" : { "contains" : { "type" : "number" } } } },
-                    { "properties" : { "values" : { "contains" : { "type" : "string" } } } }
-                ]
-            }
+            "not" : { "required" : [ "start", "stop", "num" ] }
         }
     ]
 }

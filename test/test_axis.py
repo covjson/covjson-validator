@@ -1,4 +1,4 @@
-# Pytests to test the i18n.json schema file
+# Pytests to test the axis.json schema file
 
 import pytest
 from jsonschema.exceptions import ValidationError
@@ -22,6 +22,14 @@ def test_axis_with_number_array():
     VALIDATOR.validate(axis)
 
 
+def test_primitive_axis_with_data_type():
+    ''' Tests a minimal example of a valid axis made of an array of values,
+        with declaration of primitive data type '''
+
+    axis = { "dataType" : "primitive", "values" : [1, 2, 3, 4, 5] }
+    VALIDATOR.validate(axis)
+
+
 def test_axis_with_string_array():
     ''' Tests a minimal example of a valid axis made of an array of strings (e.g. times) '''
 
@@ -38,6 +46,19 @@ def test_axis_with_tuples_array():
         "values": [
             ["2008-01-01T04:00:00Z", 1, 20],
             ["2008-01-01T04:30:00Z", 2, 21]
+        ]
+    }
+    VALIDATOR.validate(axis)
+
+
+def test_axis_with_polygons_array():
+    ''' Tests an axis whose values are polygons '''
+
+    axis = {
+        "dataType": "polygon",
+        "coordinates": ["x", "y"],
+        "values": [
+            [ [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ]  ]
         ]
     }
     VALIDATOR.validate(axis)
@@ -135,9 +156,30 @@ def test_invalid_tuples_axis():
         VALIDATOR.validate(axis)
 
 
+def test_invalid_polygons_axis():
+    ''' Invalid: type of values inconsistent with dataType (polygon) '''
+
+    axis = {
+        "dataType": "polygon",
+        "coordinates": ["x", "y"],
+        "values": [1, 2, 3, 4, 5]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
 def test_axis_with_mixed_type_values():
     ''' Invalid: axis values can't be of mixed type '''
 
     axis = { "values" : [1, 2, 3, "4", 5] }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
+def test_primitive_axis_with_mistyped_data_type():
+    ''' Tests a minimal example of a valid axis made of an array of values,
+        with declaration of primitive data type (mistyped) '''
+
+    axis = { "dataType" : "primtive", "values" : [1, 2, 3, 4, 5] }
     with pytest.raises(ValidationError):
         VALIDATOR.validate(axis)
