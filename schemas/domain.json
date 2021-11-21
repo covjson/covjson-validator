@@ -1,0 +1,70 @@
+{
+    "$id" : "/schemas/domain",
+    "description" : "A Domain, which defines a set of positions and their extent in one or more referencing systems",
+    "type" : "object",
+    "properties" :
+    {
+        "type" : { "const" : "Domain" },
+        "domainType" : { "type" : "string" },
+        "axes" :
+        {
+            "type" : "object",
+            "description" : "Set of Axis objects, keyed by axis identifier",
+            "patternProperties" :
+            {
+                ".+" : { "$ref" : "/schemas/axis" }
+            }
+        },
+        "referencing" :
+        {
+            "type" : "array",
+            "contains" : { "$ref" : "/schemas/referenceSystemConnection" }
+        }
+    },
+    "required" : [ "type", "axes" ],
+    "oneOf" :
+    [
+        {
+            "description" : "Grid domain: x and y are required, z and t optional",
+            "properties" :
+            { 
+                "domainType" : { "const" : "Grid" },
+                "axes" :
+                {
+                    "properties" :
+                    {
+                        "x" : { "$ref" : "/schemas/axis" },
+                        "y" : { "$ref" : "/schemas/axis" },
+                        "z" : { "$ref" : "/schemas/axis" },
+                        "t" : { "$ref" : "/schemas/axis" }
+                    },
+                    "required" : [ "x", "y" ],
+                    "additionalProperties" : false
+                }
+            },
+            "required" : [ "domainType" ]
+        },
+        {
+            "description" : "Trajectory domain: mandatory composite axis and optional z axis",
+            "properties" :
+            { 
+                "domainType" : { "const" : "Trajectory" },
+                "axes" :
+                {
+                    "properties" :
+                    {
+                        "composite" : { "$ref" : "/schemas/axis" },
+                        "z" : { "$ref" : "/schemas/axis" }
+                    },
+                    "required" : [ "composite" ],
+                    "additionalProperties" : false
+                }
+            },
+            "required" : [ "domainType" ]
+        },
+        {
+            "description" : "Default case: domainType omitted (no additional rules)",
+            "not" : { "required" : [ "domainType" ] }
+        }
+    ]
+}
