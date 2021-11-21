@@ -1,0 +1,12 @@
+{
+    "$id": "/schemas/polygonAxis",
+    "description" : "Polygon-based axis. TODO: specialise values array further",
+    "$ref" : "/schemas/baseAxis" ,
+    "properties" :
+    {
+        "dataType" : { "const" : "polygon" },
+        "values" : { "contains" : { "type" : "array" } }
+    },
+    "required" : [ "dataType", "values", "coordinates" ],
+    "not" : { "required" : [ "start", "stop", "num", "bounds" ] }
+}

@@ -1,0 +1,12 @@
+{
+    "$id": "/schemas/tupleAxis",
+    "description" : "Tuple-based axis",
+    "$ref" : "/schemas/baseAxis",
+    "properties" :
+    {
+        "dataType" : { "const" : "tuple" },
+        "values" : { "contains" : { "type" : "array" } }
+    },
+    "required" : [ "dataType", "values", "coordinates" ],
+    "not" : { "required" : [ "start", "stop", "num", "bounds" ] }
+}

@@ -1,11 +1,12 @@
 # Pytests to test the axis.json schema file
+# TODO: factor out into specific tests for different axis types
 
 import pytest
 from jsonschema.exceptions import ValidationError
 
 import validator
 
-VALIDATOR = validator.create_custom_validator("/schemas/axis")
+VALIDATOR = validator.create_custom_validator("/schemas/anyAxis")
 
 
 def test_valid_regular_axis():

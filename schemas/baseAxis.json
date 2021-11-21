@@ -1,0 +1,34 @@
+{
+    "$id": "/schemas/baseAxis",
+    "type" : "object",
+    "description" : "Basic properties of all axis objects, extended in other schema",
+    "properties" :
+    {
+        "start" : { "type" : "number" },
+        "stop" : { "type" : "number" },
+        "num" :
+        {
+            "type" : "integer",
+            "minimum" : 1
+        },
+        "values" :
+        {
+            "type" : "array",
+            "minItems" : 1,
+            "uniqueItems" : true
+        },
+        "bounds" :
+        {
+            "description" : "Optional axis bounds. Must be twice as long (and same data type) as \"values\"",
+            "type" : "array",
+            "minItems" : 2
+        },
+        "dataType" : { "type" : "string" },
+        "coordinates" :
+        {
+            "type" : "array",
+            "contains" : { "type" : "string" },
+            "minItems" : 1
+        }
+    }
+}
