@@ -91,7 +91,7 @@ def test_valid_anonymous_domain():
 
 
 def test_missing_type():
-    ''' Invalid: Grid domain with missing "type"  '''
+    ''' Invalid: Grid domain with missing "type" '''
 
     domain = get_sample_grid_domain()
     del domain["type"]
@@ -100,7 +100,7 @@ def test_missing_type():
 
 
 def test_misspelled_type():
-    ''' Invalid: Grid domain with misspelled "type"  '''
+    ''' Invalid: Grid domain with misspelled "type" '''
 
     domain = get_sample_grid_domain()
     domain["type"] = "Doman"
@@ -109,7 +109,7 @@ def test_misspelled_type():
 
 
 def test_missing_axes():
-    ''' Invalid: Grid domain with missing "axes"  '''
+    ''' Invalid: Grid domain with missing "axes" '''
 
     domain = get_sample_grid_domain()
     del domain["axes"]
@@ -118,7 +118,7 @@ def test_missing_axes():
 
 
 def test_wrong_domain_type():
-    ''' Invalid: Grid domain with wrong type for "domainType"  '''
+    ''' Invalid: Grid domain with wrong type for "domainType" '''
 
     domain = get_sample_grid_domain()
     domain["domainType"] = [ "Grid" ]
@@ -127,7 +127,7 @@ def test_wrong_domain_type():
 
 
 def test_missing_x_axis():
-    ''' Invalid: Grid domain with missing x axis  '''
+    ''' Invalid: Grid domain with missing x axis '''
 
     domain = get_sample_grid_domain()
     del domain["axes"]["x"]
@@ -136,7 +136,7 @@ def test_missing_x_axis():
 
 
 def test_missing_y_axis():
-    ''' Invalid: Grid domain with missing y axis  '''
+    ''' Invalid: Grid domain with missing y axis '''
 
     domain = get_sample_grid_domain()
     del domain["axes"]["y"]
@@ -145,12 +145,44 @@ def test_missing_y_axis():
 
 
 def test_extra_grid_axis():
-    ''' Invalid: Grid domain with unrecognised extra axis  '''
+    ''' Invalid: Grid domain with unrecognised extra axis '''
 
     domain = get_sample_grid_domain()
     domain["axes"]["x2"] = domain["axes"]["x"]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
+
+def test_wrong_x_axis_type():
+    ''' Invalid: Grid domain with a tuple axis instead of a primitive one '''
+
+    domain = get_sample_grid_domain()
+    domain["axes"]["x"] = {
+        "dataType": "tuple",
+        "coordinates": ["t", "x", "y"],
+        "values": [
+            ["2008-01-01T04:00:00Z", 1, 20],
+            ["2008-01-01T04:30:00Z", 2, 21]
+        ]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(domain)
+
+
+def test_wrong_x_axis_type_with_no_domain_type():
+    ''' Grid domain with a tuple axis instead of a primitive one, but
+        there is no domainType so it will validate '''
+
+    domain = get_sample_grid_domain()
+    domain["axes"]["x"] = {
+        "dataType": "tuple",
+        "coordinates": ["t", "x", "y"],
+        "values": [
+            ["2008-01-01T04:00:00Z", 1, 20],
+            ["2008-01-01T04:30:00Z", 2, 21]
+        ]
+    }
+    del domain["domainType"]
+    VALIDATOR.validate(domain)
 
 # TODO more tests for Trajectory (and perhaps refactor each set of domain type tests to separate folder)

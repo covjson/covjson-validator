@@ -9,11 +9,7 @@
         "axes" :
         {
             "type" : "object",
-            "description" : "Set of Axis objects, keyed by axis identifier",
-            "patternProperties" :
-            {
-                ".+" : { "$ref" : "/schemas/axis" }
-            }
+            "description" : "Set of Axis objects, keyed by axis identifier"
         },
         "referencing" :
         {
@@ -33,10 +29,10 @@
                 {
                     "properties" :
                     {
-                        "x" : { "$ref" : "/schemas/axis" },
-                        "y" : { "$ref" : "/schemas/axis" },
-                        "z" : { "$ref" : "/schemas/axis" },
-                        "t" : { "$ref" : "/schemas/axis" }
+                        "x" : { "$ref" : "/schemas/primitiveAxis" },
+                        "y" : { "$ref" : "/schemas/primitiveAxis" },
+                        "z" : { "$ref" : "/schemas/primitiveAxis" },
+                        "t" : { "$ref" : "/schemas/primitiveAxis" }
                     },
                     "required" : [ "x", "y" ],
                     "additionalProperties" : false
@@ -53,8 +49,8 @@
                 {
                     "properties" :
                     {
-                        "composite" : { "$ref" : "/schemas/axis" },
-                        "z" : { "$ref" : "/schemas/axis" }
+                        "composite" : { "$ref" : "/schemas/tupleAxis" },
+                        "z" : { "$ref" : "/schemas/primitiveAxis" }
                     },
                     "required" : [ "composite" ],
                     "additionalProperties" : false
@@ -63,7 +59,17 @@
             "required" : [ "domainType" ]
         },
         {
-            "description" : "Default case: domainType omitted (no additional rules)",
+            "description" : "Default case: domainType omitted, no restrictions on axes",
+            "properties" :
+            {
+                "axes" :
+                {
+                    "patternProperties" :
+                    {
+                        ".+" : { "$ref" : "/schemas/anyAxis" }
+                    }
+                }
+            },
             "not" : { "required" : [ "domainType" ] }
         }
     ]
