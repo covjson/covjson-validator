@@ -14,7 +14,7 @@
         "referencing" :
         {
             "type" : "array",
-            "contains" : { "$ref" : "/schemas/referenceSystemConnection" }
+            "items" : { "$ref" : "/schemas/referenceSystemConnection" }
         }
     },
     "required" : [ "type", "axes" ],
@@ -29,10 +29,10 @@
                 {
                     "properties" :
                     {
-                        "x" : { "$ref" : "/schemas/primitiveAxis" },
-                        "y" : { "$ref" : "/schemas/primitiveAxis" },
-                        "z" : { "$ref" : "/schemas/primitiveAxis" },
-                        "t" : { "$ref" : "/schemas/primitiveAxis" }
+                        "x" : { "$ref" : "/schemas/numericAxis" },
+                        "y" : { "$ref" : "/schemas/numericAxis" },
+                        "z" : { "$ref" : "/schemas/numericAxis" },
+                        "t" : { "$ref" : "/schemas/stringAxis" }
                     },
                     "required" : [ "x", "y" ],
                     "additionalProperties" : false
@@ -50,7 +50,7 @@
                     "properties" :
                     {
                         "composite" : { "$ref" : "/schemas/tupleAxis" },
-                        "z" : { "$ref" : "/schemas/primitiveAxis" }
+                        "z" : { "$ref" : "/schemas/numericAxis" }
                     },
                     "required" : [ "composite" ],
                     "additionalProperties" : false
