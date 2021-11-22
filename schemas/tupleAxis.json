@@ -19,7 +19,7 @@
                         { "type" : "string" }
                     ]
                 },
-                "minItems" : 1
+                "minItems" : 2
             },
             "minItems" : 1,
             "uniqueItems" : true
@@ -28,7 +28,7 @@
         {
             "type" : "array",
             "items" : { "type" : "string" },
-            "minItems" : 1
+            "minItems" : 2
         }
     },
     "required" : [ "dataType", "values", "coordinates" ],

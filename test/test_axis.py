@@ -268,6 +268,20 @@ def test_invalid_tuple_value():
         VALIDATOR.validate(axis)
 
 
+def test_missing_value_in_tuple():
+    ''' Invalid: one of the tuples only has one value (not a tuple) '''
+
+    axis = {
+        "dataType": "tuple",
+        "coordinates": ["t", "x", "y"],
+        "values": [
+            [20]
+        ]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
 def test_empty_polygon_array():
     ''' Invalid: polygon array is empty '''
 
