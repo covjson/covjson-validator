@@ -7,7 +7,7 @@
         "coordinates" :
         {
             "type" : "array",
-            "contains" : { "type" : "string" },
+            "items" : { "type" : "string" },
             "minItems" : 1
         },
         "system" :
