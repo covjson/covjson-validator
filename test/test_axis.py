@@ -166,10 +166,18 @@ def test_empty_values_array():
         VALIDATOR.validate(axis)
 
 
-def test_nonunique_values_array():
+def test_nonunique_numeric_array():
     ''' Invalid: axis values are not unique '''
 
     axis = { "values" : [1, 2, 3, 4, 5, 5]}
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
+def test_nonunique_times_array():
+    ''' Invalid: time values are not unique '''
+
+    axis = { "values" : ["2001-01-01T00:00:00Z", "2001-01-02T00:00:00Z", "2001-01-02T00:00:00Z"] }
     with pytest.raises(ValidationError):
         VALIDATOR.validate(axis)
 
@@ -268,6 +276,22 @@ def test_invalid_tuple_value():
         VALIDATOR.validate(axis)
 
 
+def test_duplicate_tuple_value():
+    ''' Invalid: tuple values are duplicated '''
+
+    axis = {
+        "dataType": "tuple",
+        "coordinates": ["t", "x", "y"],
+        "values": [
+            ["2008-01-01T04:00:00Z", 1, 20],
+            ["2008-01-01T04:30:00Z", 2, 21],
+            ["2008-01-01T04:30:00Z", 2, 21]
+        ]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
 def test_missing_value_in_tuple():
     ''' Invalid: one of the tuples only has one value (not a tuple) '''
 
@@ -304,6 +328,35 @@ def test_invalid_polygons_axis():
     }
     with pytest.raises(ValidationError):
         VALIDATOR.validate(axis)
+
+
+def test_duplicate_polygon_value():
+    ''' Invalid: polygon is duplicated '''
+
+    axis = {
+        "dataType": "polygon",
+        "coordinates": ["x", "y"],
+        "values": [
+            [ [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ] ],
+            [ [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ] ]
+        ]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
+def test_nearly_duplicate_polygon_value():
+    ''' Valid: polygon is nearly duplicated, but not quite '''
+
+    axis = {
+        "dataType": "polygon",
+        "coordinates": ["x", "y"],
+        "values": [
+            [ [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ] ],
+            [ [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.1, 1.0], [100.0, 0.0] ] ]
+        ]
+    }
+    VALIDATOR.validate(axis)
 
 
 def test_polygon_axis_missing_coordinates_array():
