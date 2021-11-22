@@ -292,7 +292,7 @@ def test_invalid_polygons_axis():
         VALIDATOR.validate(axis)
 
 
-def test_polygon_axis_missing_coordinates():
+def test_polygon_axis_missing_coordinates_array():
     ''' Invalid polygon axis: "coordinates" is missing '''
 
     axis = {
@@ -313,6 +313,20 @@ def test_polygon_axis_empty_coordinates():
         "coordinates": [ ],
         "values": [
             [ [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ]  ]
+        ]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
+def test_polygon_axis_with_invalid_coordinate_pair():
+    ''' Invalid: one of the coordinates is missing '''
+
+    axis = {
+        "dataType": "polygon",
+        "coordinates": ["x", "y"],
+        "values": [
+            [ [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0], [100.0, 0.0] ]  ]
         ]
     }
     with pytest.raises(ValidationError):

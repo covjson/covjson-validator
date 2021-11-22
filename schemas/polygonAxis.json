@@ -9,8 +9,20 @@
             "type" : "array",
             "items" :
             {
-                "description" : "A GeoJSON polygon. TODO: define more precisely",
+                "description" : "A GeoJSON polygon",
                 "type" : "array",
+                "items" :
+                {
+                    "type" : "array",
+                    "items" :
+                    {
+                        "description" : "The inner array: the coordinates themselves",
+                        "type" : "array",
+                        "items" : { "type" : "number" },
+                        "minItems" : 2
+                    },
+                    "minItems" : 1
+                },
                 "minItems" : 1
             },
             "minItems" : 1,

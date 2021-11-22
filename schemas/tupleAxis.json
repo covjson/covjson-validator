@@ -9,7 +9,7 @@
             "type" : "array",
             "items" :
             {
-                "description" : "A tuple of axis values (numbers or strings). TODO: define more precisely",
+                "description" : "A tuple of axis values (numbers or strings)",
                 "type" : "array",
                 "items" :
                 {
