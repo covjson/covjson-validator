@@ -3,7 +3,8 @@
     "description" : "Validates any axis",
     "oneOf" :
     [
-        { "$ref" : "/schemas/primitiveAxis" },
+        { "$ref" : "/schemas/numericAxis" },
+        { "$ref" : "/schemas/stringAxis" },
         { "$ref" : "/schemas/tupleAxis" },
         { "$ref" : "/schemas/polygonAxis" }
     ]

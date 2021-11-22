@@ -1,0 +1,24 @@
+{
+    "$id": "/schemas/stringAxis",
+    "description" : "Simple axis with string values (e.g. time strings)",
+    "properties" :
+    {
+        "dataType" : { "const" : "primitive" },
+        "values" :
+        {
+            "type" : "array",
+            "items" : { "type" : "string" },
+            "minItems" : 1,
+            "uniqueItems" : true
+        },
+        "bounds" :
+        {
+            "description" : "Optional axis bounds. Must be twice as long (and same data type) as \"values\"",
+            "type" : "array",
+            "items" : { "type" : "string" },
+            "minItems" : 2
+        }
+    },
+    "required" : [ "values" ],
+    "additionalProperties" : false
+}

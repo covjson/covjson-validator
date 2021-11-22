@@ -1,0 +1,45 @@
+{
+    "$id": "/schemas/numericAxis",
+    "description" : "Simple axis with numeric values",
+    "oneOf" :
+    [
+        {
+            "description" : "A regularly-spaced numeric axis",
+            "properties" :
+            {
+                "start" : { "type" : "number" },
+                "stop" : { "type" : "number" },
+                "num" :
+                {
+                    "type" : "integer",
+                    "minimum" : 1
+                }
+            },
+            "required" : [ "start", "stop", "num" ],
+            "additionalProperties" : false
+        },
+        {
+            "description" : "Axis defined by list of numeric axis values and optional bounds",
+            "properties" :
+            {
+                "dataType" : { "const" : "primitive" },
+                "values" :
+                {
+                    "type" : "array",
+                    "items" : { "type" : "number" },
+                    "minItems" : 1,
+                    "uniqueItems" : true
+                },
+                "bounds" :
+                {
+                    "description" : "Optional axis bounds. Must be twice as long (and same data type) as \"values\"",
+                    "type" : "array",
+                    "items" : { "type" : "number" },
+                    "minItems" : 2
+                }
+            },
+            "required" : [ "values" ],
+            "additionalProperties" : false
+        }
+    ]
+}

@@ -1,12 +1,28 @@
 {
     "$id": "/schemas/polygonAxis",
-    "description" : "Polygon-based axis. TODO: specialise values array further",
-    "$ref" : "/schemas/baseAxis" ,
+    "description" : "Polygon-based axis",
     "properties" :
     {
         "dataType" : { "const" : "polygon" },
-        "values" : { "contains" : { "type" : "array" } }
+        "values" :
+        {
+            "type" : "array",
+            "items" :
+            {
+                "description" : "A GeoJSON polygon. TODO: define more precisely",
+                "type" : "array",
+                "minItems" : 1
+            },
+            "minItems" : 1,
+            "uniqueItems" : true
+        },
+        "coordinates" :
+        {
+            "type" : "array",
+            "items" : { "type" : "string" },
+            "minItems" : 1
+        }
     },
     "required" : [ "dataType", "values", "coordinates" ],
-    "not" : { "required" : [ "start", "stop", "num", "bounds" ] }
+    "additionalProperties" : false
 }

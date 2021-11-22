@@ -185,6 +185,18 @@ def test_axis_with_inconsistent_bounds_type():
         VALIDATOR.validate(axis)
 
 
+def test_empty_tuples_array():
+    ''' Invalid: tuples array is empty '''
+
+    axis = {
+        "dataType": "tuple",
+        "coordinates": ["t", "x", "y"],
+        "values": []
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
 def test_invalid_tuples_axis():
     ''' Invalid: type of values inconsistent with dataType (tuple) '''
 
@@ -192,6 +204,21 @@ def test_invalid_tuples_axis():
         "dataType": "tuple",
         "coordinates": ["t", "x", "y"],
         "values": [1, 2, 3, 4, 5]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
+def test_empty_tuple():
+    ''' Invalid: one of the tuples is empty '''
+
+    axis = {
+        "dataType": "tuple",
+        "coordinates": ["t", "x", "y"],
+        "values": [
+            [],
+            ["2008-01-01T04:30:00Z", 2, 21]
+        ]
     }
     with pytest.raises(ValidationError):
         VALIDATOR.validate(axis)
@@ -226,6 +253,33 @@ def test_tuples_axis_empty_coordinates():
         VALIDATOR.validate(axis)
 
 
+def test_invalid_tuple_value():
+    ''' Invalid: one of the tuple values isn't a number or string '''
+
+    axis = {
+        "dataType": "tuple",
+        "coordinates": ["t", "x", "y"],
+        "values": [
+            ["2008-01-01T04:00:00Z", 1, 20],
+            ["2008-01-01T04:30:00Z", [2], 21]
+        ]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
+def test_empty_polygon_array():
+    ''' Invalid: polygon array is empty '''
+
+    axis = {
+        "dataType": "polygon",
+        "coordinates": ["x", "y"],
+        "values": []
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
 def test_invalid_polygons_axis():
     ''' Invalid: type of values inconsistent with dataType (polygon) '''
 
@@ -243,6 +297,20 @@ def test_polygon_axis_missing_coordinates():
 
     axis = {
         "dataType": "polygon",
+        "values": [
+            [ [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ]  ]
+        ]
+    }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(axis)
+
+
+def test_polygon_axis_empty_coordinates():
+    ''' Invalid polygon axis: "coordinates" is empty '''
+
+    axis = {
+        "dataType": "polygon",
+        "coordinates": [ ],
         "values": [
             [ [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ]  ]
         ]
