@@ -185,4 +185,5 @@ def test_wrong_x_axis_type_with_no_domain_type():
     del domain["domainType"]
     VALIDATOR.validate(domain)
 
+
 # TODO more tests for Trajectory (and perhaps refactor each set of domain type tests to separate folder)
