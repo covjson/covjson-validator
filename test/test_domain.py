@@ -90,6 +90,14 @@ def test_valid_anonymous_domain():
     VALIDATOR.validate(domain)
 
 
+def test_valid_custom_domain():
+    ''' Tests a domain with a custom domainType (valid, but not recommended) '''
+
+    domain = get_sample_trajectory_domain()
+    domain["domainType"] = "https://foo/custom"
+    VALIDATOR.validate(domain)
+
+
 def test_missing_type():
     ''' Invalid: Grid domain with missing "type" '''
 
