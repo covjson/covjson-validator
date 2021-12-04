@@ -5,86 +5,83 @@ import pytest
 from jsonschema.exceptions import ValidationError
 
 import validator
-from domain_generator import DOMAIN_TYPES, get_random_domain, get_random_domain_of_type
 
 VALIDATOR = validator.create_custom_validator("/schemas/domain")
 
 
-def test_valid_anonymous_domain():
+def test_valid_anonymous_domain(domain_1):
     ''' Tests a domain with no domainType (valid, but not recommended) '''
-
-    domain = get_random_domain()
+    
+    domain = domain_1
     del domain["domainType"]
     VALIDATOR.validate(domain)
 
 
-def test_missing_type():
+def test_missing_type(domain_1):
     ''' Invalid: Domain with missing "type" '''
 
-    domain = get_random_domain()
+    domain = domain_1
     del domain["type"]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_misspelled_type():
+def test_misspelled_type(domain_1):
     ''' Invalid: Domain with misspelled "type" '''
 
-    domain = get_random_domain()
+    domain = domain_1
     domain["type"] = "Doman"
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_wrong_domain_type():
+def test_wrong_domain_type(domain_1):
     ''' Invalid: Domain with wrong type for "domainType" '''
 
-    domain = get_random_domain_of_type('Grid')
+    domain = domain_1
     domain["domainType"] = [ "Grid" ]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_missing_axes():
+def test_missing_axes(domain_1):
     ''' Invalid: Domain with missing "axes" '''
 
-    domain = get_random_domain()
+    domain = domain_1
     del domain["axes"]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_wrong_axes_type():
+def test_wrong_axes_type(domain_1):
     ''' Invalid: Domain with wrong type for "axes" '''
 
-    domain = get_random_domain()
+    domain = domain_1
     domain["axes"] = "xyz"
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_wrong_referencing_type():
+def test_wrong_referencing_type(domain_1):
     ''' Invalid: Domain with wrong type for "referencing" '''
 
-    domain = get_random_domain()
+    domain = domain_1
     domain["referencing"] = "WGS84 and UTC"
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_additional_property():
+def test_additional_property(domain_1):
     ''' Valid: Domain with additional property '''
 
-    domain = get_random_domain()
+    domain = domain_1
     domain["ex:comment"] = "This is a comment"
     VALIDATOR.validate(domain)
 
 
-@pytest.mark.parametrize("domain_type", list(DOMAIN_TYPES.keys()))
-def test_wrong_axis_type(domain_type):
+def test_wrong_axis_type(domain):
     ''' Invalid: Domain with common domain type with mismatching axis data type '''
 
-    domain = get_random_domain_of_type(domain_type)
     axes = domain["axes"]
 
     # pick a random axis and change its data type

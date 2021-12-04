@@ -4,37 +4,29 @@ import pytest
 from jsonschema.exceptions import ValidationError
 
 import validator
-from domain_generator import get_random_domain_of_type
 
 VALIDATOR = validator.create_custom_validator("/schemas/domain")
 
 
-def get_random_trajectory_domain():
-    domain = get_random_domain_of_type('Trajectory')
-    assert domain['domainType'] == 'Trajectory'
-    return domain
-
-
-def test_valid_trajectory_domain():
+def test_valid_trajectory_domain(trajectory_domain):
     ''' Tests an example of a Trajectory domain '''
 
-    domain = get_random_trajectory_domain()
-    VALIDATOR.validate(domain)
+    VALIDATOR.validate(trajectory_domain)
 
 
-def test_missing_composite_axis():
+def test_missing_composite_axis(trajectory_domain_1):
     ''' Invalid: Trajectory domain with missing 'composite' axis '''
 
-    domain = get_random_trajectory_domain()
+    domain = trajectory_domain_1
     del domain["axes"]["composite"]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_wrong_composite_axis_type():
+def test_wrong_composite_axis_type(trajectory_domain_1):
     ''' Invalid: Trajectory domain with primitive instead of tuple axis '''
 
-    domain = get_random_trajectory_domain()
+    domain = trajectory_domain_1
     domain["axes"]["composite"] = {
         "values": [1, 2, 3]
     }
@@ -42,10 +34,10 @@ def test_wrong_composite_axis_type():
         VALIDATOR.validate(domain)
 
 
-def test_extra_axis():
+def test_extra_axis(trajectory_domain_1):
     ''' Invalid: Trajectory domain with unrecognised extra axis '''
 
-    domain = get_random_trajectory_domain()
+    domain = trajectory_domain_1
     domain["axes"]["composite2"] = domain["axes"]["composite"]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)

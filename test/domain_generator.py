@@ -1,5 +1,10 @@
 from collections import namedtuple
-import random
+import json
+from pathlib import Path
+import shutil
+import exhaust
+
+from compact_json import CompactJSONEncoder
 
 Spec = namedtuple('Spec', ['x', 'y', 'z', 't', 'composite'])
 C = namedtuple('Composite', ['cardinality', 'data_type', 'coordinates'])
@@ -18,15 +23,15 @@ DOMAIN_TYPES = {
     # 'Section':            Spec('',  '',   '+',   '',   C('+', 'tuple', ['txy'])),
 }
 
-def get_random_domain():
-    ''' Returns a random domain of a random domain type '''
 
-    domain_type = random.choice(list(DOMAIN_TYPES.keys()))
-    return get_random_domain_of_type(domain_type)
+def generate_domains_of_type(domain_type):
+    yield from exhaust.space(
+            lambda space: get_domain_of_type(domain_type, space))
 
-
-def get_random_domain_of_type(domain_type):
+def get_domain_of_type(domain_type, state):
     ''' Returns a random domain of the specified domain type '''
+
+    labels = []
 
     time_values = ["2008-01-01T04:00:00Z",
                    "2008-01-01T05:00:00Z",
@@ -44,19 +49,26 @@ def get_random_domain_of_type(domain_type):
                 values = time_values
             else:
                 values = numeric_values
-            single = { 'values': [values[0]] }
-            multi = { 'values': values[:random.randint(1, len(values))] }
 
             if cardinality == '1':
-                axes[name] = single
+                axes[name] = { 'values': [values[0]] }
             elif cardinality == '+':
-                axes[name] = multi
+                count = state.choice([1, len(values)])
+                axes[name] = { 'values': values[:count] }
+                labels.append(f"{name}={count}")
             elif cardinality == '[1]':
-                if random.random() < 0.5:
-                    axes[name] = single
+                if state.maybe():
+                    axes[name] = { 'values': [values[0]] }
+                    labels.append(f"{name}=1")
+                else:
+                    labels.append(f"{name}=0")
             elif cardinality == '[+]':
-                if random.random() < 0.5:
-                    axes[name] = multi
+                if state.maybe():
+                    count = state.choice([1, len(values)])
+                    axes[name] = { 'values': values[:count] }
+                    labels.append(f"{name}={count}")
+                else:
+                    labels.append(f"{name}=0")
             else:
                 assert False, "Invalid axis cardinality"
         elif name == 'composite':
@@ -65,7 +77,9 @@ def get_random_domain_of_type(domain_type):
                 c for c in info.coordinates
                 if set(c) & set(existing_axes) == set()
             ]
-            coordinates = list(random.choice(possible_coordinates))
+            coordinates = list(state.choice(possible_coordinates))
+            if len(info.coordinates) > 1:
+                labels.append(f"cc={''.join(coordinates)}")
             if info.data_type == 'tuple':
                 vals_by_axis = dict(
                     t=time_values,
@@ -86,7 +100,9 @@ def get_random_domain_of_type(domain_type):
             if info.cardinality == '1':
                 values = [values[0]]
             elif info.cardinality == '+':
-                values = values[:random.randint(1, len(values))]
+                count = state.choice([1, len(values)])
+                values = values[:count]
+                labels.append(f"c={count}")
             else:
                 assert False, "Invalid composite cardinality"
             
@@ -146,4 +162,28 @@ def get_random_domain_of_type(domain_type):
         "referencing": referencing
     }
     
-    return domain
+    label = ','.join(labels)
+
+    return domain, label
+
+if __name__ == "__main__":
+    this_dir = Path(__file__).parent
+    domain_dir = this_dir / 'test_data' / 'domains'
+    domain_dir.mkdir(parents=True, exist_ok=True)
+
+    for domain_type in DOMAIN_TYPES.keys():
+        domain_type_dir = domain_dir / domain_type
+        if domain_type_dir.exists():
+            shutil.rmtree(domain_type_dir)
+        domain_type_dir.mkdir()
+        jsons = []
+        paths = []
+        for domain, label in generate_domains_of_type(domain_type):
+            path = domain_type_dir / f'{domain_type}_{label}.json'
+            paths.append(path)
+            with path.open('w') as f:
+                j = json.dumps(domain, indent=2, cls=CompactJSONEncoder)
+                f.write(j)
+                jsons.append(j)
+        assert len(set(jsons)) == len(jsons), "Duplicate domains generated"
+        assert len(set(paths)) == len(paths), "Duplicate notes generated"
