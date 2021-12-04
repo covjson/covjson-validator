@@ -17,8 +17,16 @@ def test_valid_anonymous_domain(domain_1):
     VALIDATOR.validate(domain)
 
 
+def test_valid_custom_domain(domain_1):
+    ''' Tests a domain with a custom domainType (valid, but not recommended) '''
+
+    domain = domain_1
+    domain["domainType"] = "https://foo/custom"
+    VALIDATOR.validate(domain)
+
+
 def test_missing_type(domain_1):
-    ''' Invalid: Domain with missing "type" '''
+    ''' Invalid: Grid domain with missing "type" '''
 
     domain = domain_1
     del domain["type"]
