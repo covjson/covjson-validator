@@ -11,10 +11,10 @@ DOMAINS_BY_TYPE = {}
 def load_domain_test_data():
     this_dir = Path(__file__).parent
     domain_dir = this_dir / 'test_data' / 'domains'
-    for domain_type_dir in domain_dir.iterdir():
+    for domain_type_dir in sorted(domain_dir.iterdir()):
         domain_type = domain_type_dir.name
         DOMAINS_BY_TYPE[domain_type] = {}
-        for domain_file in domain_type_dir.glob('*.json'):
+        for domain_file in sorted(domain_type_dir.glob('*.json')):
             with domain_file.open() as f:
                 domain = json.load(f)
                 name = domain_file.stem
