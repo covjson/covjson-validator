@@ -9,80 +9,71 @@ import validator
 VALIDATOR = validator.create_custom_validator("/schemas/domain")
 
 
-def test_valid_anonymous_domain(domain_1):
+def test_valid_anonymous_domain(domain):
     ''' Tests a domain with no domainType (valid, but not recommended) '''
     
-    domain = domain_1
     del domain["domainType"]
     VALIDATOR.validate(domain)
 
 
-def test_valid_custom_domain(domain_1):
+def test_valid_custom_domain(domain):
     ''' Tests a domain with a custom domainType (valid, but not recommended) '''
 
-    domain = domain_1
     domain["domainType"] = "https://foo/custom"
     VALIDATOR.validate(domain)
 
 
-def test_missing_type(domain_1):
+def test_missing_type(domain):
     ''' Invalid: Grid domain with missing "type" '''
 
-    domain = domain_1
     del domain["type"]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_misspelled_type(domain_1):
+def test_misspelled_type(domain):
     ''' Invalid: Domain with misspelled "type" '''
 
-    domain = domain_1
     domain["type"] = "Doman"
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_wrong_domain_type(domain_1):
+def test_wrong_domain_type(domain):
     ''' Invalid: Domain with wrong type for "domainType" '''
 
-    domain = domain_1
     domain["domainType"] = [ "Grid" ]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_missing_axes(domain_1):
+def test_missing_axes(domain):
     ''' Invalid: Domain with missing "axes" '''
 
-    domain = domain_1
     del domain["axes"]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_wrong_axes_type(domain_1):
+def test_wrong_axes_type(domain):
     ''' Invalid: Domain with wrong type for "axes" '''
 
-    domain = domain_1
     domain["axes"] = "xyz"
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_wrong_referencing_type(domain_1):
+def test_wrong_referencing_type(domain):
     ''' Invalid: Domain with wrong type for "referencing" '''
 
-    domain = domain_1
     domain["referencing"] = "WGS84 and UTC"
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_additional_property(domain_1):
+def test_additional_property(domain):
     ''' Valid: Domain with additional property '''
 
-    domain = domain_1
     domain["ex:comment"] = "This is a comment"
     VALIDATOR.validate(domain)
 

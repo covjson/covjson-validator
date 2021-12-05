@@ -7,40 +7,38 @@ import validator
 
 VALIDATOR = validator.create_custom_validator("/schemas/domain")
 
-
+@pytest.mark.exhaustive
 def test_valid_trajectory_domain(trajectory_domain):
     ''' Tests an example of a Trajectory domain '''
 
     VALIDATOR.validate(trajectory_domain)
 
 
-def test_missing_composite_axis(trajectory_domain_1):
+def test_missing_composite_axis(trajectory_domain):
     ''' Invalid: Trajectory domain with missing 'composite' axis '''
 
-    domain = trajectory_domain_1
-    del domain["axes"]["composite"]
+    del trajectory_domain["axes"]["composite"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
+        VALIDATOR.validate(trajectory_domain)
 
 
-def test_wrong_composite_axis_type(trajectory_domain_1):
+def test_wrong_composite_axis_type(trajectory_domain):
     ''' Invalid: Trajectory domain with primitive instead of tuple axis '''
 
-    domain = trajectory_domain_1
-    domain["axes"]["composite"] = {
+    trajectory_domain["axes"]["composite"] = {
         "values": [1, 2, 3]
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
+        VALIDATOR.validate(trajectory_domain)
 
 
-def test_extra_axis(trajectory_domain_1):
+def test_extra_axis(trajectory_domain):
     ''' Invalid: Trajectory domain with unrecognised extra axis '''
 
-    domain = trajectory_domain_1
-    domain["axes"]["composite2"] = domain["axes"]["composite"]
+    trajectory_domain["axes"]["composite2"] = \
+        trajectory_domain["axes"]["composite"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
+        VALIDATOR.validate(trajectory_domain)
 
 
 # TODO test optional 'z' axis has single coordinate only

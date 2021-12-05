@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import json
-import copy
+from copy import deepcopy
 import pytest
 
 DOMAINS = {}
@@ -24,47 +24,48 @@ def load_domain_test_data():
 load_domain_test_data()
 
 
+def pytest_addoption(parser):
+    parser.addoption("--exhaustive", action="store_true",
+                     help="run tests requesting a domain with all domains, " + \
+                          "irrespective of 'exhaustive' marker")
+
+
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers", "exhaustive: mark test to always run with all domains"
+    )
+
+
+def pytest_generate_tests(metafunc):
+    exhaustive_cli = metafunc.config.getoption("exhaustive")
+    exhaustive_mark = "exhaustive" in metafunc.definition.keywords
+    single = not exhaustive_cli and not exhaustive_mark
+    if 'domain' in metafunc.fixturenames:
+        if single:
+            metafunc.parametrize('domain',
+                                 [deepcopy(next(iter(DOMAINS.values())))],
+                                 ids=[next(iter(DOMAINS.keys()))])
+        else:
+            metafunc.parametrize('domain',
+                                 map(deepcopy, DOMAINS.values()),
+                                 ids=DOMAINS.keys())
+    for domain_type in DOMAINS_BY_TYPE.keys():
+        fixture_name = f"{domain_type.lower()}_domain"
+        if fixture_name not in metafunc.fixturenames:
+            continue
+        if single:
+            metafunc.parametrize(fixture_name,
+                                 [deepcopy(next(iter(DOMAINS_BY_TYPE[domain_type].values())))],
+                                 ids=[next(iter(DOMAINS_BY_TYPE[domain_type].keys()))])
+        else:
+            metafunc.parametrize(fixture_name,
+                                 map(deepcopy, DOMAINS_BY_TYPE[domain_type].values()),
+                                 ids=DOMAINS_BY_TYPE[domain_type].keys())
+
+
 @pytest.fixture(scope='session')
 def get_domain():
     def _get_domain(domain_name):
-        return copy.deepcopy(DOMAINS[domain_name])
+        return deepcopy(DOMAINS[domain_name])
     return _get_domain
-
-
-@pytest.fixture(params=DOMAINS.values(),
-                ids=DOMAINS.keys())
-def domain(request):
-    return copy.deepcopy(request.param)
-
-
-@pytest.fixture(params=[next(iter(DOMAINS.values()))],
-                ids=[next(iter(DOMAINS.keys()))])
-def domain_1(request):
-    return copy.deepcopy(request.param)
-
-
-def generate_domain_type_fixture_all(domain_type):
-    @pytest.fixture(params=DOMAINS_BY_TYPE[domain_type].values(),
-                    ids=DOMAINS_BY_TYPE[domain_type].keys())
-    def my_fixture(request):
-        return copy.deepcopy(request.param)
-    return my_fixture
-
-
-for domain_type in DOMAINS_BY_TYPE.keys():
-    globals()[f"{domain_type.lower()}_domain"] = \
-        generate_domain_type_fixture_all(domain_type)
-
-
-def generate_domain_type_fixture_single(domain_type):    
-    @pytest.fixture(params=[next(iter(DOMAINS_BY_TYPE[domain_type].values()))],
-                    ids=[next(iter(DOMAINS_BY_TYPE[domain_type].keys()))])
-    def my_fixture(request):
-        return copy.deepcopy(request.param)
-    return my_fixture
-
-
-for domain_type in DOMAINS_BY_TYPE.keys():
-    globals()[f"{domain_type.lower()}_domain_1"] = \
-        generate_domain_type_fixture_single(domain_type)
 
