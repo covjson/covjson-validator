@@ -1,4 +1,4 @@
-# Pytests to test the domain.json schema file
+# Pytests to test the Trajectory domain type in the domain.json schema file
 
 import pytest
 from jsonschema.exceptions import ValidationError

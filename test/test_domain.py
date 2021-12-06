@@ -1,4 +1,5 @@
 # Pytests to test the domain.json schema file
+# See domain_types/ for tests specific to each domain type
 
 import random
 import pytest
@@ -24,7 +25,7 @@ def test_valid_custom_domain(domain):
 
 
 def test_missing_type(domain):
-    ''' Invalid: Grid domain with missing "type" '''
+    ''' Invalid: Domain with missing "type" '''
 
     del domain["type"]
     with pytest.raises(ValidationError):
