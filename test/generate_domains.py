@@ -58,7 +58,7 @@ def get_domain_of_type(domain_type, state):
     label_single = '1'
     label_numeric_multi = f'{len(numeric_values)}'
     label_time_multi = f'{len(time_values)}'
-    numeric_label_regular = 'reg'
+    label_numeric_regular = 'reg'
 
     spec = DOMAIN_TYPES[domain_type]._asdict()
     axes = {}
@@ -74,7 +74,7 @@ def get_domain_of_type(domain_type, state):
             elif name in ['x', 'y']:
                 axis_single = numeric_axis_single
                 axis_multi = numeric_axis_regular
-                label_multi = numeric_label_regular
+                label_multi = label_numeric_regular
             elif name == 'z':
                 axis_single = numeric_axis_single
                 axis_multi = numeric_axis_multi
