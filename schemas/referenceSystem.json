@@ -1,50 +1,48 @@
 {
     "$id": "/schemas/referenceSystem",
     "type" : "object",
-    "oneOf" :
+    "properties" :
+    {
+        "type" : { "type": "string" }
+    },
+    "required" : [ "type" ],
+    "allOf" :
     [
         {
-            "description" : "Temporal reference system",
-            "properties" :
+            "if": { "properties" : { "type" : { "const" : "TemporalRS" } } },
+            "then":
             {
-                "type" : { "const" : "TemporalRS" },
-                "calendar" : { "type" : "string" },
-                "timeScale" : { "type" : "string" }
-            },
-            "required" : [ "type", "calendar" ]
-        },
-        {
-            "description" : "An identifier-based reference system",
-            "properties" :
-            {
-                "type" : { "const" : "IdentifierRS" },
-                "id" : { "type" : "string" },
-                "label" : { "$ref" : "/schemas/i18n" },
-                "description" : { "$ref" : "/schemas/i18n" },
-                "targetConcept" : { "$ref" : "#/$defs/targetConcept" },
-                "identifiers" :
+                "description" : "Temporal reference system",
+                "properties" :
                 {
-                    "type" : "object",
-                    "patternProperties" :
-                    {
-                        ".+" : { "$ref" : "#/$defs/targetConcept" }
-                    }
-                }
-            },
-           "required" : [ "type", "targetConcept" ]
-        },
-        {
-            "description" : "Another type of reference system (e.g. geographic, vertical, projected)",
-            "properties" :
-            {
-                "type" :
-                {
-                    "type" : "string",
-                    "not" : { "enum" : [ "TemporalRS", "IdentifierRS" ] }
+                    "calendar" : { "type" : "string" },
+                    "timeScale" : { "type" : "string" }
                 },
-                "id" : { "type" : "string" }
-            },
-            "required" : [ "type" ]
+                "required" : [ "calendar" ]
+            }
+        },
+        {
+            "if": { "properties" : { "type" : { "const" : "IdentifierRS" } } },
+            "then":
+            {
+                "description" : "An identifier-based reference system",
+                "properties" :
+                {
+                    "id" : { "type" : "string" },
+                    "label" : { "$ref" : "/schemas/i18n" },
+                    "description" : { "$ref" : "/schemas/i18n" },
+                    "targetConcept" : { "$ref" : "#/$defs/targetConcept" },
+                    "identifiers" :
+                    {
+                        "type" : "object",
+                        "patternProperties" :
+                        {
+                            ".+" : { "$ref" : "#/$defs/targetConcept" }
+                        }
+                    }
+                },
+                "required" : [ "targetConcept" ]
+            }
         }
     ],
     "$defs" :
