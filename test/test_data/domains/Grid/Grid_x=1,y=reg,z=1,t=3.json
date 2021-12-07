@@ -3,16 +3,32 @@
   "domainType": "Grid",
   "axes": {
     "x": {
-      "values": [1, 2, 3]
+      "values": [1]
     },
     "y": {
-      "values": [1, 2, 3]
+      "start": 20,
+      "stop": 40,
+      "num": 100
     },
     "z": {
-      "values": [1, 2, 3]
+      "values": [1]
+    },
+    "t": {
+      "values": [
+        "2008-01-01T04:00:00Z",
+        "2008-01-01T05:00:00Z",
+        "2008-01-01T06:00:00Z"
+      ]
     }
   },
   "referencing": [
+    {
+      "coordinates": ["t"],
+      "system": {
+        "type": "TemporalRS",
+        "calendar": "Gregorian"
+      }
+    },
     {
       "coordinates": ["x", "y"],
       "system": {

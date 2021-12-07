@@ -32,11 +32,33 @@ def get_domain_of_type(domain_type, state):
     ''' Returns a random domain of the specified domain type '''
 
     labels = []
-
+    
     time_values = ["2008-01-01T04:00:00Z",
                    "2008-01-01T05:00:00Z",
                    "2008-01-01T06:00:00Z"]
     numeric_values = [1, 2, 3]
+
+    time_axis_single = {
+        "values": [time_values[0]]
+    }
+    time_axis_multi = {
+        "values": time_values
+    }
+    numeric_axis_single = {
+        "values": [numeric_values[0]] 
+    }
+    numeric_axis_multi = {
+        "values": numeric_values
+    }
+    numeric_axis_regular = {
+        "start": 20, "stop": 40, "num": 100
+    }
+    
+    label_missing = '0'
+    label_single = '1'
+    label_numeric_multi = f'{len(numeric_values)}'
+    label_time_multi = f'{len(time_values)}'
+    numeric_label_regular = 'reg'
 
     spec = DOMAIN_TYPES[domain_type]._asdict()
     axes = {}
@@ -46,29 +68,45 @@ def get_domain_of_type(domain_type, state):
         if name in ['x', 'y', 'z', 't']:
             cardinality = info
             if name == 't':
-                values = time_values
+                axis_single = time_axis_single
+                axis_multi = time_axis_multi
+                label_multi = label_time_multi
+            elif name in ['x', 'y']:
+                axis_single = numeric_axis_single
+                axis_multi = numeric_axis_regular
+                label_multi = numeric_label_regular
+            elif name == 'z':
+                axis_single = numeric_axis_single
+                axis_multi = numeric_axis_multi
+                label_multi = label_numeric_multi
             else:
-                values = numeric_values
+                assert False, "Invalid axis name"
 
             if cardinality == '1':
-                axes[name] = { 'values': [values[0]] }
+                axes[name] = axis_single
             elif cardinality == '+':
-                count = state.choice([1, len(values)])
-                axes[name] = { 'values': values[:count] }
-                labels.append(f"{name}={count}")
+                if state.maybe():
+                    axes[name] = axis_single
+                    labels.append(f"{name}={label_single}")
+                else:
+                    axes[name] = axis_multi
+                    labels.append(f"{name}={label_multi}")
             elif cardinality == '[1]':
                 if state.maybe():
-                    axes[name] = { 'values': [values[0]] }
-                    labels.append(f"{name}=1")
+                    axes[name] = axis_single
+                    labels.append(f"{name}={label_single}")
                 else:
-                    labels.append(f"{name}=0")
+                    labels.append(f"{name}={label_missing}")
             elif cardinality == '[+]':
                 if state.maybe():
-                    count = state.choice([1, len(values)])
-                    axes[name] = { 'values': values[:count] }
-                    labels.append(f"{name}={count}")
+                    if state.maybe():
+                        axes[name] = axis_single
+                        labels.append(f"{name}={label_single}")
+                    else:
+                        axes[name] = axis_multi
+                        labels.append(f"{name}={label_multi}")
                 else:
-                    labels.append(f"{name}=0")
+                    labels.append(f"{name}={label_missing}")
             else:
                 assert False, "Invalid axis cardinality"
         elif name == 'composite':

@@ -3,10 +3,12 @@
   "domainType": "Grid",
   "axes": {
     "x": {
-      "values": [1]
+      "start": 20,
+      "stop": 40,
+      "num": 100
     },
     "y": {
-      "values": [1, 2, 3]
+      "values": [1]
     },
     "t": {
       "values": [
