@@ -42,7 +42,7 @@
                                     "x" : { "$ref" : "/schemas/numericAxis" },
                                     "y" : { "$ref" : "/schemas/numericAxis" },
                                     "z" : { "$ref" : "/schemas/numericAxis" },
-                                    "t" : { "$ref" : "/schemas/stringAxis" }
+                                    "t" : { "$ref" : "/schemas/stringValuesAxis" }
                                 },
                                 "required" : [ "x", "y" ],
                                 "additionalProperties" : false
@@ -61,7 +61,7 @@
                             {
                                 "properties" :
                                 {
-                                    "composite" : { "$ref" : "/schemas/tupleAxis" },
+                                    "composite" : { "$ref" : "/schemas/tupleValuesAxis" },
                                     "z" : { "$ref" : "/schemas/numericAxis" }
                                 },
                                 "required" : [ "composite" ],
