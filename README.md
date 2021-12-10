@@ -5,7 +5,8 @@ This repo contains JSON schema and associated Python code for validating [Covera
 ## Setup
  1. Install a Python environment with pip (version x or above), e.g. using conda (`conda create -n covjson-validator pip`)
  2. Install requirements (`pip install -r requirements.txt`)
- 3. 
+
+N.B. Make sure to install requirements via `pip`, not `conda` (at the time of writing the version of `jsonschema` in conda was too old to run the tests).
 
 ## Running the validator
 
