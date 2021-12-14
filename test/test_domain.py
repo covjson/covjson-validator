@@ -7,6 +7,7 @@ import validator
 
 VALIDATOR = validator.create_custom_validator("/schemas/domain")
 
+pytestmark = pytest.mark.schema("/schemas/domain")
 
 def get_sample_grid_domain():
     ''' Returns a sample of a valid grid domain '''
@@ -68,11 +69,11 @@ def get_sample_trajectory_domain():
     }
 
 
-def test_valid_grid_domain():
+def test_valid_grid_domain(validator):
     ''' Tests an example of a Grid domain '''
 
     domain = get_sample_grid_domain()
-    VALIDATOR.validate(domain)
+    validator.validate(domain)
 
 
 def test_valid_trajectory_domain():
