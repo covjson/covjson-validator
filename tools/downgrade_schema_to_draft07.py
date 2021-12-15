@@ -74,6 +74,18 @@ def downgrade_schema_to_draft07(root_schema):
         obj[key] = new_value
 
     walk_dict(root_schema, ref_key, patch_ref)
+
+    # Rename "dependentSchemas" to "dependencies"
+    dependent_schemas_key = "dependentSchemas"
+    dependencies_key = "dependencies"
+
+    def patch_dependent_schemas(obj, key, value):
+        assert key == dependent_schemas_key
+        assert dependencies_key not in obj
+        obj[dependencies_key] = value
+        del obj[dependent_schemas_key]
+
+    walk_dict(root_schema, dependent_schemas_key, patch_dependent_schemas)
     
     return root_schema
 
