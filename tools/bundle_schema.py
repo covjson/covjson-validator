@@ -86,7 +86,7 @@ def bundle_schema(schema_store, root_schema_id):
         root_schema[defs_key] = {}
     defs = root_schema[defs_key]
 
-    for schema_id in refs:
+    for schema_id in sorted(refs):
         schema = schema_store[schema_id]
         defs[schema_id] = schema
 

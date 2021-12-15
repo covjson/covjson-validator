@@ -56,6 +56,7 @@ def downgrade_schema_to_draft07(root_schema):
         del obj[defs_key]
     
     walk_dict(root_schema, defs_key, move_defs)
+    root_schema[definitions_key] = dict(sorted(definitions.items()))
     
     # Change all "$ref" values to use JSON pointer syntax
     ref_key = "$ref"
