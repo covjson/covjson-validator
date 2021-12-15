@@ -1,6 +1,6 @@
 {
     "$id": "/schemas/valuesAxisBase",
-    "description" : "Base schema for values-based axis schemas",
+    "$comment" : "Base schema for values-based axis schemas",
     "properties" :
     {
         "dataType" : {
