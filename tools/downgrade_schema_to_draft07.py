@@ -9,6 +9,9 @@ import argparse
 import json
 import copy
 
+import jsonschema
+
+
 JSON_SCHEMA_DRAFT_07 = "http://json-schema.org/draft-07/schema"
 
 
@@ -31,6 +34,7 @@ def downgrade_schema_to_draft07(root_schema):
 
     schema_key = "$schema"
     if root_schema.get(schema_key) == JSON_SCHEMA_DRAFT_07:
+        print("Schema is already in draft-07 dialect")
         return root_schema
     
     # Change dialect declaration
@@ -86,6 +90,10 @@ def downgrade_schema_to_draft07(root_schema):
         del obj[dependent_schemas_key]
 
     walk_dict(root_schema, dependent_schemas_key, patch_dependent_schemas)
+
+    # Validate against the draft-07 meta schema
+    # This will not catch all errors, but it is a good start
+    jsonschema.Draft7Validator.check_schema(root_schema)
     
     return root_schema
 
