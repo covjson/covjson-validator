@@ -7,6 +7,7 @@ import validator
 
 VALIDATOR = validator.create_custom_validator("/schemas/domain")
 
+
 @pytest.mark.exhaustive
 def test_valid_grid_domain(grid_domain):
     ''' Tests an example of a Grid domain '''
@@ -53,7 +54,6 @@ def test_extra_multi_coordinate_axis(grid_domain):
 #     VALIDATOR.validate(grid_domain)
 
 
-
 def test_wrong_x_axis_type_with_no_domain_type(grid_domain):
     ''' Grid domain with a tuple axis instead of a primitive one, but
         there is no domainType so it will validate '''
@@ -68,4 +68,3 @@ def test_wrong_x_axis_type_with_no_domain_type(grid_domain):
     }
     del grid_domain["domainType"]
     VALIDATOR.validate(grid_domain)
-
