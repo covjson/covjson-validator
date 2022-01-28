@@ -1,5 +1,7 @@
 # Pytests to test the domain.json schema file
+# See domain_types/ for tests specific to each domain type
 
+import random
 import pytest
 from jsonschema.exceptions import ValidationError
 
@@ -8,190 +10,107 @@ import validator
 VALIDATOR = validator.create_custom_validator("/schemas/domain")
 
 
-def get_sample_grid_domain():
-    ''' Returns a sample of a valid grid domain '''
-
-    return {
-        "type": "Domain",
-        "domainType": "Grid",
-        "axes": {
-            "x": { "values": [1, 2, 3] },
-            "y": { "values": [20, 21] },
-            "z": { "values": [1] },
-            "t": { "values": ["2008-01-01T04:00:00Z"] }
-        },
-        "referencing": [{
-            "coordinates": ["t"],
-            "system": {
-                "type": "TemporalRS",
-                "calendar": "Gregorian"
-            }
-        }, {
-            "coordinates": ["y", "x", "z"],
-            "system": {
-                "type": "GeographicCRS",
-                "id": "http://www.opengis.net/def/crs/EPSG/0/4979"
-            }
-        }]
-    }
-
-
-def get_sample_trajectory_domain():
-    ''' Returns a sample of a valid trajectory domain '''
-
-    return {
-        "type": "Domain",
-        "domainType": "Trajectory",
-        "axes": {
-            "composite": {
-                "dataType": "tuple",
-                "coordinates": ["t", "x", "y"],
-                "values": [
-                    ["2008-01-01T04:00:00Z", 1, 20],
-                    ["2008-01-01T04:30:00Z", 2, 21]
-                ]
-            }
-        },
-        "referencing": [{
-            "coordinates": ["t"],
-            "system": {
-                "type": "TemporalRS",
-                "calendar": "Gregorian"
-            }
-        }, {
-            "coordinates": ["x", "y"],
-            "system": {
-                "type": "GeographicCRS",
-                "id": "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
-            }
-        }]
-    }
-
-
-def test_valid_grid_domain():
-    ''' Tests an example of a Grid domain '''
-
-    domain = get_sample_grid_domain()
-    VALIDATOR.validate(domain)
-
-
-def test_valid_trajectory_domain():
-    ''' Tests an example of a Trajectory domain '''
-
-    domain = get_sample_trajectory_domain()
-    VALIDATOR.validate(domain)
-
-
-def test_valid_anonymous_domain():
+def test_valid_anonymous_domain(domain):
     ''' Tests a domain with no domainType (valid, but not recommended) '''
-
-    domain = get_sample_trajectory_domain()
+    
     del domain["domainType"]
     VALIDATOR.validate(domain)
 
 
-def test_valid_custom_domain():
+def test_valid_custom_domain(domain):
     ''' Tests a domain with a custom domainType (valid, but not recommended) '''
 
-    domain = get_sample_trajectory_domain()
     domain["domainType"] = "https://foo/custom"
     VALIDATOR.validate(domain)
 
 
-def test_missing_type():
-    ''' Invalid: Grid domain with missing "type" '''
+def test_missing_type(domain):
+    ''' Invalid: Domain with missing "type" '''
 
-    domain = get_sample_grid_domain()
     del domain["type"]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_misspelled_type():
-    ''' Invalid: Grid domain with misspelled "type" '''
+def test_misspelled_type(domain):
+    ''' Invalid: Domain with misspelled "type" '''
 
-    domain = get_sample_grid_domain()
     domain["type"] = "Doman"
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_missing_axes():
-    ''' Invalid: Grid domain with missing "axes" '''
+def test_wrong_domain_type(domain):
+    ''' Invalid: Domain with wrong type for "domainType" '''
 
-    domain = get_sample_grid_domain()
-    del domain["axes"]
-    with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
-
-
-def test_wrong_domain_type():
-    ''' Invalid: Grid domain with wrong type for "domainType" '''
-
-    domain = get_sample_grid_domain()
     domain["domainType"] = [ "Grid" ]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_missing_x_axis():
-    ''' Invalid: Grid domain with missing x axis '''
+def test_missing_axes(domain):
+    ''' Invalid: Domain with missing "axes" '''
 
-    domain = get_sample_grid_domain()
-    del domain["axes"]["x"]
+    del domain["axes"]
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_missing_y_axis():
-    ''' Invalid: Grid domain with missing y axis '''
+def test_wrong_axes_type(domain):
+    ''' Invalid: Domain with wrong type for "axes" '''
 
-    domain = get_sample_grid_domain()
-    del domain["axes"]["y"]
+    domain["axes"] = "xyz"
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_extra_grid_axis():
-    ''' Invalid: Grid domain with unrecognised extra axis '''
+def test_wrong_referencing_type(domain):
+    ''' Invalid: Domain with wrong type for "referencing" '''
 
-    domain = get_sample_grid_domain()
-    domain["axes"]["x2"] = domain["axes"]["x"]
+    domain["referencing"] = "WGS84 and UTC"
     with pytest.raises(ValidationError):
         VALIDATOR.validate(domain)
 
 
-def test_wrong_x_axis_type():
-    ''' Invalid: Grid domain with a tuple axis instead of a primitive one '''
+def test_additional_property(domain):
+    ''' Valid: Domain with additional property '''
 
-    domain = get_sample_grid_domain()
-    domain["axes"]["x"] = {
-        "dataType": "tuple",
-        "coordinates": ["t", "x", "y"],
-        "values": [
-            ["2008-01-01T04:00:00Z", 1, 20],
-            ["2008-01-01T04:30:00Z", 2, 21]
-        ]
-    }
-    with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
-
-
-def test_wrong_x_axis_type_with_no_domain_type():
-    ''' Grid domain with a tuple axis instead of a primitive one, but
-        there is no domainType so it will validate '''
-
-    domain = get_sample_grid_domain()
-    domain["axes"]["x"] = {
-        "dataType": "tuple",
-        "coordinates": ["t", "x", "y"],
-        "values": [
-            ["2008-01-01T04:00:00Z", 1, 20],
-            ["2008-01-01T04:30:00Z", 2, 21]
-        ]
-    }
-    del domain["domainType"]
+    domain["ex:comment"] = "This is a comment"
     VALIDATOR.validate(domain)
 
 
-# TODO more tests for Trajectory (and perhaps refactor each set of domain type tests to separate folder)
+def test_wrong_axis_type(domain):
+    ''' Invalid: Domain with common domain type with mismatching axis data type '''
+
+    axes = domain["axes"]
+
+    # pick a random axis and change its data type
+    name = list(axes.keys())[random.randint(0, len(axes) - 1)]
+    if name in ['x', 'y', 'z', 't']:
+        axes[name] = {
+            "dataType": "tuple",
+            "coordinates": ["t", "x", "y"],
+            "values": [
+                ["2008-01-01T04:00:00Z", 1, 20],
+                ["2008-01-01T04:30:00Z", 2, 21]
+            ]
+        }
+    elif name == 'composite':
+        axes[name] = { "values": [1] }
+
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(domain)
+
+# TODO test that coordinates without matching reference system are rejected
+#      The spec doesn't reject it, but probably should.
+
+# For all common domain types:
+# TODO test that 't', if existing, must be connected to a TemporalRS
+# TODO test that 'x', 'y', 'z', if existing, must be connected
+#      to GeographicCRS / ProjectedCRS
+# NOTE: this may need stricter text in the spec, currently:
+# "The axis and coordinate identifiers "x" and "y" MUST refer
+#  to horizontal spatial coordinates, "z" to vertical spatial
+#  coordinates, and all of "x", "y", and "z" MUST be referenced
+#  by a spatial coordinate reference system."
+
