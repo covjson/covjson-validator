@@ -56,7 +56,7 @@ def test_primitive_axis_with_data_type():
     ''' Tests a minimal example of a valid axis made of an array of values,
         with declaration of primitive data type '''
 
-    axis = { "dataType" : "primitive", "values" : [1, 2, 3, 4, 5] }
+    axis = { "values" : [1, 2, 3, 4, 5] }
     VALIDATOR.validate(axis)
 
 
@@ -408,10 +408,12 @@ def test_axis_with_mixed_type_values():
         VALIDATOR.validate(axis)
 
 
-def test_primitive_axis_with_mistyped_data_type():
-    ''' Tests a minimal example of a valid axis made of an array of values,
-        with declaration of primitive data type (mistyped) '''
+def test_tuple_axis_with_mistyped_data_type():
+    ''' Valid: dataType is mistyped but valid as custom type '''
 
-    axis = { "dataType" : "primtive", "values" : [1, 2, 3, 4, 5] }
-    with pytest.raises(ValidationError):
-        VALIDATOR.validate(axis)
+    axis = {
+        "dataType": "tple",
+        "coordinates": ["x", "y"],
+        "values": [ [1, 20], [2, 21] ]
+    }
+    VALIDATOR.validate(axis)
