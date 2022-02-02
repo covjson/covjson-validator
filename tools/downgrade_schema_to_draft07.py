@@ -64,7 +64,7 @@ def downgrade_schema_to_draft07(root_schema):
     
     # Change all "$ref" values to use JSON pointer syntax
     ref_key = "$ref"
-    def patch_ref(obj, key, value):
+    def patch_ref_json_pointer(obj, key, value):
         assert key == ref_key
         definitions_prefix = "#/definitions/"
         new_value = value.replace("/schemas/", definitions_prefix)
@@ -77,7 +77,32 @@ def downgrade_schema_to_draft07(root_schema):
             f"in definitions: {', '.join(definitions.keys())}"
         obj[key] = new_value
 
-    walk_dict(root_schema, ref_key, patch_ref)
+    walk_dict(root_schema, ref_key, patch_ref_json_pointer)
+
+    # Ensure "$ref" is not used alongside other keywords,
+    # else wrap with "allOf"
+    def patch_ref_alone(obj, key, value):
+        assert key == ref_key
+        allowed_keywords = []
+        other_keywords = []
+        for k in obj.keys():
+            if k == ref_key:
+                continue
+            if k.startswith("$") or k == "definitions":
+                allowed_keywords.append(k)
+            else:
+                other_keywords.append(k)
+        if other_keywords:
+            all_of = [
+                { ref_key: value},
+                { k: obj[k] for k in other_keywords}
+            ]
+            del obj[ref_key]
+            for k in other_keywords:
+                del obj[k]
+            obj["allOf"] = all_of
+
+    walk_dict(root_schema, ref_key, patch_ref_alone)
 
     # Rename "dependentSchemas" to "dependencies"
     dependent_schemas_key = "dependentSchemas"
