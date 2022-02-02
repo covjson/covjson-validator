@@ -64,6 +64,14 @@ def test_wrong_axes_type(domain):
         VALIDATOR.validate(domain)
 
 
+def test_missing_referencing(domain):
+    ''' Invalid: Domain with missing "referencing" '''
+
+    del domain["referencing"]
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(domain)
+
+
 def test_wrong_referencing_type(domain):
     ''' Invalid: Domain with wrong type for "referencing" '''
 
