@@ -1,0 +1,54 @@
+{
+    "$id" : "/schemas/coverageBase",
+    "description" : "A Coverage, representing a mapping from a domain to sets of data values described by parameters.",
+    "type" : "object",
+    "properties" :
+    {
+        "type" : { "const" : "Coverage" },
+        "id": { "type": "string" },
+        "domainType" : { "type" : "string" },
+        "domain":
+        {
+            "oneOf" :
+            [
+                { "type": "string" },
+                { "$ref" : "/schemas/domainBase" }
+            ]
+        },
+        "parameters":
+        {
+            "type": "object",
+            "patternProperties" :
+            {
+                ".+" : { "$ref": "/schemas/parameter" }
+            }
+        },
+        "parameterGroups":
+        {
+            "type": "array",
+            "items": { "$ref": "/schemas/parameterGroup" }
+        },
+        "ranges":
+        {
+            "type": "object",
+            "patternProperties" :
+            {
+                ".+" : 
+                {
+                    "oneOf" :
+                    [
+                        { "type": "string" },
+                        { "$ref" : "/schemas/ndArray" },
+                        { "$ref" : "/schemas/tiledNdArray" }
+                    ]
+                }
+            }
+        },
+        "rangeAlternates":
+        {
+            "type": "object"
+        }
+    },
+    "required" : [ "type", "domain", "ranges" ]
+
+}
