@@ -31,7 +31,7 @@ def get_sample_coverage_collection():
             }
         },
         "referencing": [{
-            "coordinates": ["x","y"],
+            "coordinates": ["x", "y"],
             "system": {
                 "type": "GeographicCRS",
                 "id": "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
@@ -91,8 +91,9 @@ def get_sample_coverage_collection():
                         "values" : [ 42.7, 41.8, 40.9 ]
                     }
                 }
-            }]
-        }
+            }
+        ]
+    }
 
 
 def test_valid_coverage_collection():

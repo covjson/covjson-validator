@@ -17,13 +17,13 @@ def get_sample_coverage():
             "type" : "Domain",
             "domainType" : "Grid",
             "axes": {
-                "x" : { "values": [-10,-5,0] },
-                "y" : { "values": [40,50] },
-                "z" : { "values": [ 5] },
+                "x" : { "values": [-10, -5, 0] },
+                "y" : { "values": [40, 50] },
+                "z" : { "values": [5] },
                 "t" : { "values": ["2010-01-01T00:12:20Z"] }
             },
             "referencing": [{
-                "coordinates": ["y","x","z"],
+                "coordinates": ["y", "x", "z"],
                 "system": {
                     "type": "GeographicCRS",
                     "id": "http://www.opengis.net/def/crs/EPSG/0/4979"
@@ -51,7 +51,7 @@ def get_sample_coverage():
             "ICEC" : {
                 "type" : "NdArray",
                 "dataType": "float",
-                "axisNames": ["t","z","y","x"],
+                "axisNames": ["t", "z", "y", "x"],
                 "shape": [1, 1, 2, 3],
                 "values" : [ 0.5, 0.6, 0.4, 0.6, 0.2, None ]
             }
@@ -89,7 +89,7 @@ def test_range_is_tiled():
     coverage["ranges"]["ICEC"] = {
         "type" : "TiledNdArray",
         "dataType": "float",
-        "axisNames": ["t","z","y","x"],
+        "axisNames": ["t", "z", "y", "x"],
         "shape": [1, 1, 2, 3],
         "tileSets": [{
             "tileShape": [1, None, None, None],
@@ -205,7 +205,6 @@ def test_incorrect_alternate_ranges():
     coverage["rangeAlternates"] = []
     with pytest.raises(ValidationError):
         VALIDATOR.validate(coverage)
-
 
 
 # TODO test that "ranges" keys match "parameters" keys
