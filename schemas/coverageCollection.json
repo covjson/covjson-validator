@@ -75,7 +75,7 @@
                             {
                                 "domain":
                                 {
-                                    "if": { "not": { "type": "string" } },
+                                    "if": { "type": "object" },
                                     "then": { "required": [ "referencing" ] }
                                 }
                             }
