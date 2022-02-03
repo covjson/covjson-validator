@@ -6,12 +6,10 @@
 import pytest
 from jsonschema.exceptions import ValidationError
 
-import validator
-
-VALIDATOR = validator.create_custom_validator("/schemas/parameter")
+pytestmark = pytest.mark.schema("/schemas/parameter")
 
 
-def test_valid_continuous_parameter():
+def test_valid_continuous_parameter(validator):
     ''' Tests an example of a valid continuous parameter object '''
 
     param = {
@@ -32,10 +30,10 @@ def test_valid_continuous_parameter():
             }
         }
     }
-    VALIDATOR.validate(param)
+    validator.validate(param)
 
 
-def test_valid_categorical_parameter():
+def test_valid_categorical_parameter(validator):
     ''' Tests an example of a valid categorical parameter object '''
 
     param = {
@@ -59,10 +57,10 @@ def test_valid_categorical_parameter():
             "http://example.com/land_cover/categories/forest": [2, 3]
         }
     }
-    VALIDATOR.validate(param)
+    validator.validate(param)
 
 
-def test_minimal_continuous_parameter():
+def test_minimal_continuous_parameter(validator):
     ''' Tests a continuous parameter object with minimal information: we'll use
         variations of this in further tests, so we want to make sure this one works '''
 
@@ -73,10 +71,10 @@ def test_minimal_continuous_parameter():
         },
         "unit" : { "symbol": "Cel" }
     }
-    VALIDATOR.validate(param)
+    validator.validate(param)
 
 
-def test_minimal_categorical_parameter():
+def test_minimal_categorical_parameter(validator):
     ''' Tests a categorical parameter object with minimal information: we'll use
         variations of this in further tests, so we want to make sure this one works '''
 
@@ -97,10 +95,10 @@ def test_minimal_categorical_parameter():
             "http://example.com/land_cover/categories/forest": [2, 3]
         }
     }
-    VALIDATOR.validate(param)
+    validator.validate(param)
 
 
-def test_no_type():
+def test_no_type(validator):
     ''' Invalid: parameter object with no "type" '''
 
     param = {
@@ -110,10 +108,10 @@ def test_no_type():
         "unit" : { "symbol": "Cel" }
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(param)
+        validator.validate(param)
 
 
-def test_wrong_type():
+def test_wrong_type(validator):
     ''' Invalid: parameter object with mistyped "type" '''
 
     param = {
@@ -124,10 +122,10 @@ def test_wrong_type():
         "unit" : { "symbol": "Cel" }
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(param)
+        validator.validate(param)
 
 
-def test_noninteger_category_encoding():
+def test_noninteger_category_encoding(validator):
     ''' Invalid: parameter object with non-integer value in categoryEncoding '''
 
     param = {
@@ -148,10 +146,10 @@ def test_noninteger_category_encoding():
         }
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(param)
+        validator.validate(param)
 
 
-def test_nonunique_category_encoding():
+def test_nonunique_category_encoding(validator):
     ''' Invalid: parameter object with non-unique value in categoryEncoding '''
 
     param = {
@@ -172,4 +170,4 @@ def test_nonunique_category_encoding():
         }
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(param)
+        validator.validate(param)

@@ -5,7 +5,7 @@ from copy import deepcopy
 import pytest
 import jsonschema
 
-import validator as validator_
+import tools.validator as validator_
 from tools.bundle_schema import bundle_schema
 from tools.downgrade_schema_to_draft07 import downgrade_schema_to_draft07
 
@@ -31,8 +31,7 @@ def validator(request, schema_store):
         return validator
     schema = schema_store[schema_id]
     if mode == "native":
-        resolver = jsonschema.RefResolver(None, referrer=None, store=schema_store)
-        validator = jsonschema.Draft202012Validator(schema, resolver=resolver)
+        validator = validator_.create_custom_validator(schema_id, schema_store)
     elif mode == "draft-07-bundle":
         schema = bundle_schema(schema_store, schema_id)
         schema = downgrade_schema_to_draft07(schema)

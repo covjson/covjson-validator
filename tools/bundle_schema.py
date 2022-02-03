@@ -95,8 +95,7 @@ def bundle_schema(schema_store, root_schema_id):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    # TODO change the default to the top-level CovJSON schema
-    parser.add_argument('--root', default='/schemas/domain')
+    parser.add_argument('--root', default='/schemas/coveragejson')
     parser.add_argument('--out', default='bundle.json')
     args = parser.parse_args()
     

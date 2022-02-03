@@ -3,19 +3,16 @@
 import pytest
 from jsonschema.exceptions import ValidationError
 
-import validator
+pytestmark = pytest.mark.schema("/schemas/observedProperty")
 
-VALIDATOR = validator.create_custom_validator("/schemas/observedProperty")
-
-
-def test_valid_minimal_observed_property():
+def test_valid_minimal_observed_property(validator):
     ''' Tests an example of a valid minimal i18n object '''
 
     op = { "label" : { "en" : "sea surface temperature" } }
-    VALIDATOR.validate(op)
+    validator.validate(op)
 
 
-def test_continuous_observed_property():
+def test_continuous_observed_property(validator):
     ''' Tests an observedProperty for continuous data '''
 
     op = {
@@ -23,10 +20,10 @@ def test_continuous_observed_property():
         "label" : { "en" : "Sea Surface Temperature" },
         "description" : { "en" : "The temperature of sea water near the surface" }
     }
-    VALIDATOR.validate(op)
+    validator.validate(op)
 
 
-def test_categorical_observed_property():
+def test_categorical_observed_property(validator):
     ''' Tests an observedProperty for categorical data '''
 
     op = {
@@ -45,18 +42,18 @@ def test_categorical_observed_property():
             }
         ]
     }
-    VALIDATOR.validate(op)
+    validator.validate(op)
 
 
-def test_invalid_label():
+def test_invalid_label(validator):
     ''' Invalid: label must be an i18n object '''
 
     op = { "label" : "sea surface temperature" }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(op)
+        validator.validate(op)
 
 
-def test_invalid_description():
+def test_invalid_description(validator):
     ''' Invalid: description must be an i18n object '''
 
     op = {
@@ -64,20 +61,20 @@ def test_invalid_description():
         "description" : "This should be an i18n object"
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(op)
+        validator.validate(op)
 
 
-def test_missing_label():
+def test_missing_label(validator):
     ''' Invalid: label must be present '''
 
     op = {
         "description" : { "en" : "The temperature of sea water near the surface" }
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(op)
+        validator.validate(op)
 
 
-def test_empty_categories():
+def test_empty_categories(validator):
     ''' Invalid: categories array can't be empty if present '''
 
     op = {
@@ -85,10 +82,10 @@ def test_empty_categories():
         "categories" : []
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(op)
+        validator.validate(op)
 
 
-def test_non_array_categories():
+def test_non_array_categories(validator):
     ''' Invalid: categories must be an array '''
 
     op = {
@@ -99,4 +96,4 @@ def test_non_array_categories():
         }
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(op)
+        validator.validate(op)

@@ -3,9 +3,7 @@
 import pytest
 from jsonschema.exceptions import ValidationError
 
-import validator
-
-VALIDATOR = validator.create_custom_validator("/schemas/coverage")
+pytestmark = pytest.mark.schema("/schemas/coverage")
 
 
 def get_sample_coverage():
@@ -59,30 +57,30 @@ def get_sample_coverage():
     }
 
 
-def test_valid_coverage():
+def test_valid_coverage(validator):
     ''' Valid: Tests an example of a coverage '''
 
     coverage = get_sample_coverage()
-    VALIDATOR.validate(coverage)
+    validator.validate(coverage)
 
 
-def test_domain_is_url():
+def test_domain_is_url(validator):
     ''' Valid: Coverage with "domain" as a URL '''
 
     coverage = get_sample_coverage()
     coverage["domain"] = "http://example.com/domain.json"
-    VALIDATOR.validate(coverage)
+    validator.validate(coverage)
 
 
-def test_range_is_url():
+def test_range_is_url(validator):
     ''' Valid: Coverage with range as a URL '''
 
     coverage = get_sample_coverage()
     coverage["ranges"]["ICEC"] = "http://example.com/icec.json"
-    VALIDATOR.validate(coverage)
+    validator.validate(coverage)
 
 
-def test_range_is_tiled():
+def test_range_is_tiled(validator):
     ''' Valid: Coverage with tiled range '''
 
     coverage = get_sample_coverage()
@@ -96,115 +94,115 @@ def test_range_is_tiled():
             "urlTemplate": "http://example.com/{t}.covjson"
         }]
     }
-    VALIDATOR.validate(coverage)
+    validator.validate(coverage)
 
 
-def test_missing_type():
+def test_missing_type(validator):
     ''' Invalid: Coverage with missing "type" '''
 
     coverage = get_sample_coverage()
     del coverage["type"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
-def test_misspelled_type():
+def test_misspelled_type(validator):
     ''' Invalid: Coverage with misspelled "type" '''
 
     coverage = get_sample_coverage()
     coverage["type"] = "Coverag"
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
-def test_incorrect_id_type():
+def test_incorrect_id_type(validator):
     ''' Invalid: Coverage with incorrect "id" type '''
 
     coverage = get_sample_coverage()
     coverage["id"] = 42
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
-def test_missing_domain():
+def test_missing_domain(validator):
     ''' Invalid: Coverage with missing "domain" '''
 
     coverage = get_sample_coverage()
     del coverage["domain"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
-def test_incorrect_domain_type():
+def test_incorrect_domain_type(validator):
     ''' Invalid: Coverage with incorrect "domain" type '''
 
     coverage = get_sample_coverage()
     coverage["domain"]["type"] = "NotADomain"
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
-def test_incorrect_domain_type_type():
+def test_incorrect_domain_type_type(validator):
     ''' Invalid: Coverage with incorrect "domainType" type '''
 
     coverage = get_sample_coverage()
     coverage["domainType"] = [ "Grid" ]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
-def test_missing_parameters():
+def test_missing_parameters(validator):
     ''' Invalid: Coverage with missing "parameters" '''
 
     coverage = get_sample_coverage()
     del coverage["parameters"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
-def test_incorrect_parameters_type():
+def test_incorrect_parameters_type(validator):
     ''' Invalid: Coverage with incorrect "parameters" type '''
 
     coverage = get_sample_coverage()
     coverage["parameters"] = list(coverage["parameters"].values())
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
-def test_incorrect_parameter_groups_type():
+def test_incorrect_parameter_groups_type(validator):
     ''' Invalid: Coverage with incorrect "parameterGroups" type '''
 
     coverage = get_sample_coverage()
     coverage["parameterGroups"] = coverage["parameters"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
-def test_missing_ranges():
+def test_missing_ranges(validator):
     ''' Invalid: Coverage with missing "ranges" '''
 
     coverage = get_sample_coverage()
     del coverage["ranges"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
-def test_incorrect_range_type():
+def test_incorrect_range_type(validator):
     ''' Invalid: Coverage with incorrect range type '''
 
     coverage = get_sample_coverage()
     coverage["ranges"]["ICEC"]["type"] = "SomethingElse"
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
-def test_incorrect_alternate_ranges():
+def test_incorrect_alternate_ranges(validator):
     ''' Invalid: Coverage with incorrect "rangeAlternates" type '''
 
     coverage = get_sample_coverage()
     coverage["rangeAlternates"] = []
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(coverage)
+        validator.validate(coverage)
 
 
 # TODO test that "ranges" keys match "parameters" keys
