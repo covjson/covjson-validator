@@ -12,7 +12,7 @@
             "oneOf" :
             [
                 { "type": "string" },
-                { "$ref" : "/schemas/domain" }
+                { "$ref" : "/schemas/domainBase" }
             ]
         },
         "parameters":
