@@ -70,14 +70,6 @@ def test_missing_referencing(validator, domain):
         validator.validate(domain)
 
 
-def test_missing_referencing(validator, domain):
-    ''' Invalid: Domain with missing "referencing" '''
-
-    del domain["referencing"]
-    with pytest.raises(ValidationError):
-        validator.validate(domain)
-
-
 def test_wrong_referencing_type(validator, domain):
     ''' Invalid: Domain with wrong type for "referencing" '''
 
