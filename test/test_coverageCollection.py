@@ -133,6 +133,16 @@ def test_referencing_per_coverage_with_domain_url(validator):
     validator.validate(collection)
 
 
+def test_referencing_per_coverage_with_domain_url(validator):
+    ''' Valid: Collection with "referencing" embedded inside remote coverage domains '''
+
+    collection = get_sample_coverage_collection()
+    del collection["referencing"]
+    for coverage in collection["coverages"]:
+        coverage["domain"] = "http://example.com/domain.json"
+    validator.validate(collection)
+
+
 def test_missing_type(validator):
     ''' Invalid: Collection with missing "type" '''
 
