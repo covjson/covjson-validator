@@ -8,18 +8,23 @@
        "label" : { "$ref" : "/schemas/i18n" },
        "symbol" :
        {
-           "oneOf" :
+           "allOf":
            [
-               { "type" : "string" },
-               {
-                   "type" : "object",
-                   "properties" :
-                   {
-                       "type" : { "type" : "string" },
-                       "value" : { "type" : "string" }
-                   },
-                   "required" : [ "type", "value" ]
-               }
+                { 
+                    "type": [ "string", "object" ]
+                },
+                {
+                    "if": { "type": "object" },
+                    "then":
+                    {
+                        "properties" :
+                        {
+                            "type" : { "type" : "string" },
+                            "value" : { "type" : "string" }
+                        },
+                        "required" : [ "type", "value" ]
+                    }
+                }
            ]
        }
     },
