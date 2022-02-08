@@ -23,4 +23,9 @@ def test_invalid_i18n_object():
         VALIDATOR.validate(invalid_i18n)
 
 
-# TODO: add test for invalid language strings?
+def test_invalid_i18n_language_tag():
+    ''' Tests an example of an invalid i18n language tag '''
+
+    invalid_i18n = { "e" : "Fish" }
+    with pytest.raises(ValidationError):
+        VALIDATOR.validate(invalid_i18n)
