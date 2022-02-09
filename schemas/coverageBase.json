@@ -9,10 +9,15 @@
         "domainType" : { "type" : "string" },
         "domain":
         {
-            "oneOf" :
+            "allOf" : 
             [
-                { "type": "string" },
-                { "$ref" : "/schemas/domainBase" }
+                { 
+                    "type": [ "string", "object" ]
+                },
+                {
+                    "if": { "type": "object" },
+                    "then": { "$ref" : "/schemas/domainBase" }
+                }
             ]
         },
         "parameters":
@@ -35,11 +40,54 @@
             {
                 ".+" : 
                 {
-                    "oneOf" :
+                    "allOf" : 
                     [
-                        { "type": "string" },
-                        { "$ref" : "/schemas/ndArray" },
-                        { "$ref" : "/schemas/tiledNdArray" }
+                        { 
+                            "type": [ "string", "object" ]
+                        },
+                        {
+                            "if":
+                            {
+                                "type": "object"
+                            },
+                            "then":
+                            {
+                                "properties":
+                                {
+                                    "type": 
+                                    {
+                                        "enum":
+                                        [
+                                            "NdArray",
+                                            "TiledNdArray"
+                                        ]
+                                    }
+                                },
+                                "required": ["type"]
+                            }
+                        },
+                        {
+                            "if":
+                            {
+                                "type": "object",
+                                "properties" :
+                                {
+                                    "type" : { "const" : "NdArray" }
+                                }
+                            },
+                            "then":{ "$ref": "/schemas/ndArray" }
+                        },
+                        {
+                            "if":
+                            {
+                                "type": "object",
+                                "properties" :
+                                {
+                                    "type" : { "const" : "TiledNdArray" }
+                                }
+                            },
+                            "then":{ "$ref": "/schemas/tiledNdArray" }
+                        }
                     ]
                 }
             }
