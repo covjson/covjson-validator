@@ -5,89 +5,87 @@ import random
 import pytest
 from jsonschema.exceptions import ValidationError
 
-import validator
-
-VALIDATOR = validator.create_custom_validator("/schemas/domain")
+pytestmark = pytest.mark.schema("/schemas/domain")
 
 
-def test_valid_anonymous_domain(domain):
+def test_valid_anonymous_domain(validator, domain):
     ''' Tests a domain with no domainType (valid, but not recommended) '''
     
     del domain["domainType"]
-    VALIDATOR.validate(domain)
+    validator.validate(domain)
 
 
-def test_valid_custom_domain(domain):
+def test_valid_custom_domain(validator, domain):
     ''' Tests a domain with a custom domainType (valid, but not recommended) '''
 
     domain["domainType"] = "https://foo/custom"
-    VALIDATOR.validate(domain)
+    validator.validate(domain)
 
 
-def test_missing_type(domain):
+def test_missing_type(validator, domain):
     ''' Invalid: Domain with missing "type" '''
 
     del domain["type"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
+        validator.validate(domain)
 
 
-def test_misspelled_type(domain):
+def test_misspelled_type(validator, domain):
     ''' Invalid: Domain with misspelled "type" '''
 
     domain["type"] = "Doman"
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
+        validator.validate(domain)
 
 
-def test_wrong_domain_type(domain):
+def test_wrong_domain_type(validator, domain):
     ''' Invalid: Domain with wrong type for "domainType" '''
 
     domain["domainType"] = [ "Grid" ]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
+        validator.validate(domain)
 
 
-def test_missing_axes(domain):
+def test_missing_axes(validator, domain):
     ''' Invalid: Domain with missing "axes" '''
 
     del domain["axes"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
+        validator.validate(domain)
 
 
-def test_wrong_axes_type(domain):
+def test_wrong_axes_type(validator, domain):
     ''' Invalid: Domain with wrong type for "axes" '''
 
     domain["axes"] = "xyz"
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
+        validator.validate(domain)
 
 
-def test_missing_referencing(domain):
+def test_missing_referencing(validator, domain):
     ''' Invalid: Domain with missing "referencing" '''
 
     del domain["referencing"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
+        validator.validate(domain)
 
 
-def test_wrong_referencing_type(domain):
+def test_wrong_referencing_type(validator, domain):
     ''' Invalid: Domain with wrong type for "referencing" '''
 
     domain["referencing"] = "WGS84 and UTC"
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
+        validator.validate(domain)
 
 
-def test_additional_property(domain):
+def test_additional_property(validator, domain):
     ''' Valid: Domain with additional property '''
 
     domain["ex:comment"] = "This is a comment"
-    VALIDATOR.validate(domain)
+    validator.validate(domain)
 
 
-def test_wrong_axis_type(domain):
+def test_wrong_axis_type(validator, domain):
     ''' Invalid: Domain with common domain type with mismatching axis data type '''
 
     axes = domain["axes"]
@@ -107,7 +105,7 @@ def test_wrong_axis_type(domain):
         axes[name] = { "values": [1] }
 
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(domain)
+        validator.validate(domain)
 
 # TODO test that coordinates without matching reference system are rejected
 #      The spec doesn't reject it, but probably should.

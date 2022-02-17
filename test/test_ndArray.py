@@ -3,9 +3,7 @@
 import pytest
 from jsonschema.exceptions import ValidationError
 
-import validator
-
-VALIDATOR = validator.create_custom_validator("/schemas/ndArray")
+pytestmark = pytest.mark.schema("/schemas/ndArray")
 
 def get_example_ndarray():
     return {
@@ -19,14 +17,14 @@ def get_example_ndarray():
         ]
     }
 
-def test_valid_float_ndarray():
+def test_valid_float_ndarray(validator):
     ''' Valid: A simple float ndarray '''
 
     ndarray = get_example_ndarray()
-    VALIDATOR.validate(ndarray)
+    validator.validate(ndarray)
 
 
-def test_valid_integer_ndarray():
+def test_valid_integer_ndarray(validator):
     ''' Valid: A simple integer ndarray '''
 
     ndarray = get_example_ndarray()
@@ -35,10 +33,10 @@ def test_valid_integer_ndarray():
         12, 12, 11, 23,
         None, None, 10, 9
     ]
-    VALIDATOR.validate(ndarray)
+    validator.validate(ndarray)
 
 
-def test_valid_string_ndarray():
+def test_valid_string_ndarray(validator):
     ''' Valid: A simple string ndarray '''
 
     ndarray = get_example_ndarray()
@@ -47,10 +45,10 @@ def test_valid_string_ndarray():
         "a", "b", "c", "d",
         None, None, "g", "h"
     ]
-    VALIDATOR.validate(ndarray)
+    validator.validate(ndarray)
 
 
-def test_compact_0d_ndarray():
+def test_compact_0d_ndarray(validator):
     ''' Valid: 0D ndarray without "shape" and "axisNames" '''
 
     axis = {
@@ -58,10 +56,10 @@ def test_compact_0d_ndarray():
         "dataType": "float",
         "values": [ 12.5 ]
     }
-    VALIDATOR.validate(axis)
+    validator.validate(axis)
 
 
-def test_complete_0d_ndarray():
+def test_complete_0d_ndarray(validator):
     ''' Valid: 0D ndarray with empty "shape" and "axisNames" '''
 
     axis = {
@@ -71,98 +69,98 @@ def test_complete_0d_ndarray():
         "axisNames": [],
         "values": [ 12.5 ]
     }
-    VALIDATOR.validate(axis)
+    validator.validate(axis)
 
 
-def test_missing_type():
+def test_missing_type(validator):
     ''' Invalid: NdArray with missing "type" '''
 
     ndarray = get_example_ndarray()
     del ndarray["type"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(ndarray)
+        validator.validate(ndarray)
 
 
-def test_misspelled_type():
+def test_misspelled_type(validator):
     ''' Invalid: NdArray with misspelled "type" '''
 
     ndarray = get_example_ndarray()
     ndarray["type"] = "Ndarray"
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(ndarray)
+        validator.validate(ndarray)
 
 
-def test_missing_data_type():
+def test_missing_data_type(validator):
     ''' Invalid: NdArray with missing "dataType" '''
 
     ndarray = get_example_ndarray()
     del ndarray["dataType"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(ndarray)
+        validator.validate(ndarray)
 
 
-def test_unknown_data_type():
+def test_unknown_data_type(validator):
     ''' Invalid: NdArray with unknown "dataType" '''
 
     ndarray = get_example_ndarray()
     ndarray["dataType"] = "float64"
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(ndarray)
+        validator.validate(ndarray)
 
 
-def test_mismatching_data_type():
+def test_mismatching_data_type(validator):
     ''' Invalid: NdArray with "dataType" mismatching "values" '''
 
     ndarray = get_example_ndarray()
     ndarray["dataType"] = "string"
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(ndarray)
+        validator.validate(ndarray)
 
 
-def test_incorrect_shape_type():
+def test_incorrect_shape_type(validator):
     ''' Invalid: NdArray with incorrect "shape" type '''
 
     ndarray = get_example_ndarray()
     ndarray["shape"] = [ "4", "2" ]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(ndarray)
+        validator.validate(ndarray)
 
 
-def test_incorrect_axis_names_type():
+def test_incorrect_axis_names_type(validator):
     ''' Invalid: NdArray with incorrect "axisNames" type '''
 
     ndarray = get_example_ndarray()
     ndarray["axisNames"] = [ 0, 1 ]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(ndarray)
+        validator.validate(ndarray)
 
 
-def test_non_0d_with_missing_shape():
+def test_non_0d_with_missing_shape(validator):
     ''' Invalid: NdArray with missing "shape" and not 0D '''
 
     ndarray = get_example_ndarray()
     del ndarray["shape"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(ndarray)
+        validator.validate(ndarray)
 
 
-def test_non_0d_with_missing_axis_names():
+def test_non_0d_with_missing_axis_names(validator):
     ''' Invalid: NdArray with missing "axisNames" and not 0D '''
 
     ndarray = get_example_ndarray()
     del ndarray["axisNames"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(ndarray)
+        validator.validate(ndarray)
 
 
-def test_non_0d_with_missing_shape_and_axis_names():
+def test_non_0d_with_missing_shape_and_axis_names(validator):
     ''' Invalid: NdArray with missing "axisNames" & "shape" and not 0D '''
 
     ndarray = get_example_ndarray()
     del ndarray["shape"]
     del ndarray["axisNames"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(ndarray)
+        validator.validate(ndarray)
 
 
 

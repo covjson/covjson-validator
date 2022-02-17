@@ -3,19 +3,17 @@
 import pytest
 from jsonschema.exceptions import ValidationError
 
-import validator
-
-VALIDATOR = validator.create_custom_validator("/schemas/unit")
+pytestmark = pytest.mark.schema("/schemas/unit")
 
 
-def test_unit_with_symbol_string():
+def test_unit_with_symbol_string(validator):
     ''' Tests a unit where we use a string for the symbol '''
 
     unit = { "symbol" : "m" }
-    VALIDATOR.validate(unit)
+    validator.validate(unit)
 
 
-def test_unit_with_typed_symbol():
+def test_unit_with_typed_symbol(validator):
     ''' Tests a unit where we use a typed symbol '''
 
     unit = {
@@ -26,17 +24,17 @@ def test_unit_with_typed_symbol():
             "value" : "Cel"
         }
     }
-    VALIDATOR.validate(unit)
+    validator.validate(unit)
 
 
-def test_unit_with_label_only():
+def test_unit_with_label_only(validator):
     ''' Tests a unit where we only have a label, no symbol '''
 
     unit = { "label" : { "en" : "Degree Celsius" } }
-    VALIDATOR.validate(unit)
+    validator.validate(unit)
 
 
-def test_unit_with_label_and_symbol():
+def test_unit_with_label_and_symbol(validator):
     ''' Tests a unit where we have both a label and a symbol '''
 
     unit = {
@@ -47,28 +45,28 @@ def test_unit_with_label_and_symbol():
             "value" : "Cel"
         }
     }
-    VALIDATOR.validate(unit)
+    validator.validate(unit)
 
 
-def test_no_label_or_symbol():
+def test_no_label_or_symbol(validator):
     ''' Invalid: unit must have either label or symbol'''
 
     unit = { "id" : "http://example.com/my_unit" }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(unit)
+        validator.validate(unit)
 
 
-def test_unit_with_typed_symbol_missing_type():
+def test_unit_with_typed_symbol_missing_type(validator):
     ''' Invalid: typed symbol must have "type" property '''
 
     unit = { "symbol" : { "value" : "Cel" } }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(unit)
+        validator.validate(unit)
 
 
-def test_unit_with_typed_symbol_missing_value():
+def test_unit_with_typed_symbol_missing_value(validator):
     ''' Invalid: typed symbol must have "label" property '''
 
     unit = { "symbol" : { "type" : "http://www.opengis.net/def/uom/UCUM/" } }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(unit)
+        validator.validate(unit)

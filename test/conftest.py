@@ -1,12 +1,53 @@
 # pytest fixtures available in tests
-
 from pathlib import Path
 import json
 from copy import deepcopy
 import pytest
+import jsonschema
 
+import tools.validator as validator_
+from tools.bundle_schema import bundle_schema
+from tools.downgrade_schema_to_draft07 import downgrade_schema_to_draft07
+
+
+VALIDATOR_CACHE = {}
 DOMAINS = {}
 DOMAINS_BY_TYPE = {}
+
+
+@pytest.fixture(scope="session")
+def schema_store():
+    return validator_.create_schema_store()
+
+
+@pytest.fixture(params=["native", "draft-07-bundle"])
+def validator(request, schema_store):
+    mode = request.param
+    schema_marker = request.node.get_closest_marker("schema")
+    assert schema_marker is not None
+    schema_id = schema_marker.args[0]
+    validator = VALIDATOR_CACHE.get((mode, schema_id))
+    if validator:
+        return validator
+    schema = schema_store[schema_id]
+    if mode == "native":
+        validator = validator_.create_custom_validator(schema_id, schema_store)
+    elif mode == "draft-07-bundle":
+        schema = bundle_schema(schema_store, schema_id)
+        schema = downgrade_schema_to_draft07(schema)
+        validator = jsonschema.Draft7Validator(schema)
+        # dump to disk for debugging purposes
+        tmp_dir = Path("tmp")
+        tmp_dir.mkdir(exist_ok=True)
+        schema_name = schema_id.removeprefix("/schemas/")
+        schema_file = tmp_dir / f"{schema_name}.draft07.json"
+        with open(schema_file, "w") as f:
+            json.dump(schema, f, indent=2)
+    else:
+        raise ValueError(f"Unknown mode {mode}")
+    VALIDATOR_CACHE[(mode, schema_id)] = validator
+    return validator
+
 
 def load_domain_test_data():
     this_dir = Path(__file__).parent
@@ -34,6 +75,21 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "exhaustive: mark test to always run with all domains"
     )
+    config.addinivalue_line(
+        "markers", "schema(name): use the named schema for the 'validator' fixture"
+    )
+
+
+# Indirect parametrization fixtures, see pytest_generate_tests below.
+# Necessary to always return a fresh copy of a domain that can
+# be modified by the test.
+@pytest.fixture
+def domain(request):
+    return deepcopy(DOMAINS[request.param])
+
+for domain_type in DOMAINS_BY_TYPE.keys():
+    fixture_name = f"{domain_type.lower()}_domain"
+    globals()[fixture_name] = domain
 
 
 def pytest_generate_tests(metafunc):
@@ -43,24 +99,24 @@ def pytest_generate_tests(metafunc):
     if 'domain' in metafunc.fixturenames:
         if single:
             metafunc.parametrize('domain',
-                                 [deepcopy(next(iter(DOMAINS.values())))],
-                                 ids=[next(iter(DOMAINS.keys()))])
+                                 [next(iter(DOMAINS.keys()))],
+                                 indirect=True)
         else:
             metafunc.parametrize('domain',
-                                 map(deepcopy, DOMAINS.values()),
-                                 ids=DOMAINS.keys())
+                                 DOMAINS.keys(),
+                                 indirect=True)
     for domain_type in DOMAINS_BY_TYPE.keys():
         fixture_name = f"{domain_type.lower()}_domain"
         if fixture_name not in metafunc.fixturenames:
             continue
         if single:
             metafunc.parametrize(fixture_name,
-                                 [deepcopy(next(iter(DOMAINS_BY_TYPE[domain_type].values())))],
-                                 ids=[next(iter(DOMAINS_BY_TYPE[domain_type].keys()))])
+                                 [next(iter(DOMAINS_BY_TYPE[domain_type].keys()))],
+                                 indirect=True)
         else:
             metafunc.parametrize(fixture_name,
-                                 map(deepcopy, DOMAINS_BY_TYPE[domain_type].values()),
-                                 ids=DOMAINS_BY_TYPE[domain_type].keys())
+                                 DOMAINS_BY_TYPE[domain_type].keys(),
+                                 indirect=True)
 
 
 @pytest.fixture(scope='session')

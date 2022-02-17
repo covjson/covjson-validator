@@ -3,9 +3,7 @@
 import pytest
 from jsonschema.exceptions import ValidationError
 
-import validator
-
-VALIDATOR = validator.create_custom_validator("/schemas/coverageCollection")
+pytestmark = pytest.mark.schema("/schemas/coverageCollection")
 
 
 def get_sample_coverage_collection():
@@ -96,14 +94,14 @@ def get_sample_coverage_collection():
     }
 
 
-def test_valid_coverage_collection():
+def test_valid_coverage_collection(validator):
     ''' Valid: Tests an example of a collection '''
 
     collection = get_sample_coverage_collection()
-    VALIDATOR.validate(collection)
+    validator.validate(collection)
 
 
-def test_parameters_per_coverage():
+def test_parameters_per_coverage(validator):
     ''' Valid: Collection with "parameters" embedded inside coverages '''
 
     collection = get_sample_coverage_collection()
@@ -111,10 +109,10 @@ def test_parameters_per_coverage():
     del collection["parameters"]
     for coverage in collection["coverages"]:
         coverage["parameters"] = parameters
-    VALIDATOR.validate(collection)
+    validator.validate(collection)
 
 
-def test_referencing_per_coverage():
+def test_referencing_per_coverage(validator):
     ''' Valid: Collection with "referencing" embedded inside coverage domains '''
 
     collection = get_sample_coverage_collection()
@@ -122,116 +120,116 @@ def test_referencing_per_coverage():
     del collection["referencing"]
     for coverage in collection["coverages"]:
         coverage["domain"]["referencing"] = referencing
-    VALIDATOR.validate(collection)
+    validator.validate(collection)
 
 
-def test_referencing_per_coverage_with_domain_url():
+def test_referencing_per_coverage_with_domain_url(validator):
     ''' Valid: Collection with "referencing" embedded inside remote coverage domains '''
 
     collection = get_sample_coverage_collection()
     del collection["referencing"]
     for coverage in collection["coverages"]:
         coverage["domain"] = "http://example.com/domain.json"
-    VALIDATOR.validate(collection)
+    validator.validate(collection)
 
 
-def test_missing_type():
+def test_missing_type(validator):
     ''' Invalid: Collection with missing "type" '''
 
     collection = get_sample_coverage_collection()
     del collection["type"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(collection)
+        validator.validate(collection)
 
 
-def test_misspelled_type():
+def test_misspelled_type(validator):
     ''' Invalid: Collection with misspelled "type" '''
 
     collection = get_sample_coverage_collection()
     collection["type"] = "Collection"
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(collection)
+        validator.validate(collection)
 
 
-def test_missing_coverages():
+def test_missing_coverages(validator):
     ''' Invalid: Collection with missing "coverages" '''
 
     collection = get_sample_coverage_collection()
     del collection["coverages"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(collection)
+        validator.validate(collection)
 
 
-def test_incorrect_coverages_type():
+def test_incorrect_coverages_type(validator):
     ''' Invalid: Collection with incorrect "coverages" type '''
 
     collection = get_sample_coverage_collection()
     collection["coverages"] = "http://example.com/coverages.json"
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(collection)
+        validator.validate(collection)
 
 
-def test_incorrect_coverages_member_type():
+def test_incorrect_coverages_member_type(validator):
     ''' Invalid: Collection with incorrect "coverages" member type '''
 
     collection = get_sample_coverage_collection()
     collection["coverages"][0]["type"] = [ "NotACoverage" ]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(collection)
+        validator.validate(collection)
 
 
-def test_incorrect_domain_type_type():
+def test_incorrect_domain_type_type(validator):
     ''' Invalid: Collection with incorrect "domainType" type '''
 
     collection = get_sample_coverage_collection()
     collection["domainType"] = [ "VerticalProfile" ]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(collection)
+        validator.validate(collection)
 
 
-def test_missing_parameters():
+def test_missing_parameters(validator):
     ''' Invalid: Collection with missing "parameters" (incl. inside coverage) '''
 
     collection = get_sample_coverage_collection()
     del collection["parameters"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(collection)
+        validator.validate(collection)
 
 
-def test_incorrect_parameters_type():
+def test_incorrect_parameters_type(validator):
     ''' Invalid: Collection with incorrect "parameters" type '''
 
     collection = get_sample_coverage_collection()
     collection["parameters"] = list(collection["parameters"].values())
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(collection)
+        validator.validate(collection)
 
 
-def test_incorrect_parameter_groups_type():
+def test_incorrect_parameter_groups_type(validator):
     ''' Invalid: Collection with incorrect "parameterGroups" type '''
 
     collection = get_sample_coverage_collection()
     collection["parameterGroups"] = collection["parameters"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(collection)
+        validator.validate(collection)
 
 
-def test_missing_referencing():
+def test_missing_referencing(validator):
     ''' Invalid: Collection with missing "referencing" (incl. inside coverage) '''
 
     collection = get_sample_coverage_collection()
     del collection["referencing"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(collection)
+        validator.validate(collection)
 
 
-def test_incorrect_referencing_type():
+def test_incorrect_referencing_type(validator):
     ''' Invalid: Coverage with incorrect "referencing" type '''
 
     collection = get_sample_coverage_collection()
     del collection["referencing"][0]["coordinates"]
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(collection)
+        validator.validate(collection)
 
 
 # TODO test that all coverage ranges reference a parameter in scope

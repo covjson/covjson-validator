@@ -28,11 +28,12 @@ def create_schema_store():
     return schema_store
 
 
-def create_custom_validator(schema_id):
+def create_custom_validator(schema_id, schema_store=None):
     ''' Creates a validator that uses the custom schema store '''
 
-    schema_store = create_schema_store()
-    schema = schema_store.get(schema_id)
+    if schema_store is None:
+        schema_store = create_schema_store()
+    schema = schema_store[schema_id]
 
     resolver = jsonschema.RefResolver(None, referrer=None, store=schema_store)
     # TODO: should be able to use validator_for(schema) to get an appropriate
@@ -40,3 +41,18 @@ def create_custom_validator(schema_id):
     validator = jsonschema.validators.Draft202012Validator(schema, resolver=resolver)
 
     return validator
+
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('covjson_path', type=str,
+                        help='Path to CoverageJSON document')
+    args = parser.parse_args()
+
+    with open(args.covjson_path, encoding="utf-8") as f:
+        obj = json.load(f)
+    
+    validator = create_custom_validator("/schemas/coveragejson")
+    validator.validate(obj)
+    print("Valid!")

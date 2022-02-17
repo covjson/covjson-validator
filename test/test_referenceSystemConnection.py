@@ -3,12 +3,9 @@
 import pytest
 from jsonschema.exceptions import ValidationError
 
-import validator
+pytestmark = pytest.mark.schema("/schemas/referenceSystemConnection")
 
-VALIDATOR = validator.create_custom_validator("/schemas/referenceSystemConnection")
-
-
-def test_valid_rsc():
+def test_valid_rsc(validator):
     ''' Tests an example of a valid reference system connection object '''
 
     rsc = {
@@ -18,10 +15,10 @@ def test_valid_rsc():
             "id": "http://www.opengis.net/def/crs/EPSG/0/4979"
         }
     }
-    VALIDATOR.validate(rsc)
+    validator.validate(rsc)
 
 
-def test_missing_coordinates():
+def test_missing_coordinates(validator):
     ''' Invalid: missing coordinates '''
 
     rsc = {
@@ -31,10 +28,10 @@ def test_missing_coordinates():
         }
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(rsc)
+        validator.validate(rsc)
 
 
-def test_empty_coordinates():
+def test_empty_coordinates(validator):
     ''' Invalid: empty coordinates array '''
 
     rsc = {
@@ -45,10 +42,10 @@ def test_empty_coordinates():
         }
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(rsc)
+        validator.validate(rsc)
 
 
-def test_invalid_coordinates_type():
+def test_invalid_coordinates_type(validator):
     ''' Invalid: invalid contents of coordinates array '''
 
     rsc = {
@@ -59,20 +56,20 @@ def test_invalid_coordinates_type():
         }
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(rsc)
+        validator.validate(rsc)
 
 
-def test_missing_system():
+def test_missing_system(validator):
     ''' Invalid: missing system '''
 
     rsc = {
         "coordinates": ["y", "x", "z"]
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(rsc)
+        validator.validate(rsc)
 
 
-def test_invalid_system():
+def test_invalid_system(validator):
     ''' Invalid coordinate system object (missing type) '''
 
     rsc = {
@@ -82,4 +79,4 @@ def test_invalid_system():
         }
     }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(rsc)
+        validator.validate(rsc)
