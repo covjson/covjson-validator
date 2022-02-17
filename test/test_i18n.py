@@ -21,9 +21,9 @@ def test_invalid_i18n_object(validator):
         validator.validate(invalid_i18n)
 
 
-def test_invalid_i18n_language_tag():
+def test_invalid_i18n_language_tag(validator):
     ''' Tests an example of an invalid i18n language tag '''
 
     invalid_i18n = { "e" : "Fish" }
     with pytest.raises(ValidationError):
-        VALIDATOR.validate(invalid_i18n)
+        validator.validate(invalid_i18n)
