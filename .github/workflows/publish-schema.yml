@@ -1,0 +1,39 @@
+name: Publish schema
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
+        
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Create folder
+      run: mkdir dist
+      
+    - name: Bundle schema
+      run: python tools/bundle_schema.py --out dist/schema.json
+    
+    - name: Downgrade schema to draft-07
+      run: python tools/downgrade_schema_to_draft07.py dist/schema.json
+    
+    - name: Publish to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+        publish_branch: gh-pages
