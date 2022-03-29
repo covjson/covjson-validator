@@ -10,7 +10,7 @@ import argparse
 import json
 import copy
 
-from validator import create_schema_store
+from .validator import create_schema_store
 
 JSON_SCHEMA_2019_09 = "http://json-schema.org/2019-09/schema"
 JSON_SCHEMA_2020_12 = "http://json-schema.org/2020-12/schema"
