@@ -5,6 +5,7 @@ from jsonschema.exceptions import ValidationError
 
 pytestmark = pytest.mark.schema("/schemas/ndArray")
 
+
 def get_example_ndarray():
     return {
         "type": "NdArray",
@@ -16,6 +17,7 @@ def get_example_ndarray():
             None, None, 10.1, 9.1
         ]
     }
+
 
 def test_valid_float_ndarray(validator):
     ''' Valid: A simple float ndarray '''
@@ -161,7 +163,6 @@ def test_non_0d_with_missing_shape_and_axis_names(validator):
     del ndarray["axisNames"]
     with pytest.raises(ValidationError):
         validator.validate(ndarray)
-
 
 
 # TODO test that "values" has the same length as mul("shape")

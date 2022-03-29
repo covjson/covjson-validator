@@ -5,6 +5,7 @@ from jsonschema.exceptions import ValidationError
 
 pytestmark = pytest.mark.schema("/schemas/referenceSystemConnection")
 
+
 def test_valid_rsc(validator):
     ''' Tests an example of a valid reference system connection object '''
 

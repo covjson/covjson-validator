@@ -1,5 +1,6 @@
 import json
 
+
 # https://stackoverflow.com/a/54577313/60982
 class CompactJSONEncoder(json.JSONEncoder):
     """A JSON Encoder that puts small lists on single lines."""
@@ -38,7 +39,7 @@ class CompactJSONEncoder(json.JSONEncoder):
     @property
     def indent_str(self) -> str:
         return " " * self.indentation_level * self.indent
-    
+
     def iterencode(self, o, **kwargs):
         """Required to also work with `json.dump`."""
         return self.encode(o)

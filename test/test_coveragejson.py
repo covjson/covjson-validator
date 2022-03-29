@@ -65,4 +65,3 @@ def test_misspelled_type(validator, get_domain):
     domain["type"] = "Doman"
     with pytest.raises(ValidationError):
         validator.validate(domain)
-

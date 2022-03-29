@@ -28,11 +28,12 @@ def generate_domains_of_type(domain_type):
     yield from exhaust.space(
             lambda space: get_domain_of_type(domain_type, space))
 
+
 def get_domain_of_type(domain_type, state):
     ''' Returns a random domain of the specified domain type '''
 
     labels = []
-    
+
     time_values = ["2008-01-01T04:00:00Z",
                    "2008-01-01T05:00:00Z",
                    "2008-01-01T06:00:00Z"]
@@ -45,7 +46,7 @@ def get_domain_of_type(domain_type, state):
         "values": time_values
     }
     numeric_axis_single = {
-        "values": [numeric_values[0]] 
+        "values": [numeric_values[0]]
     }
     numeric_axis_multi = {
         "values": numeric_values
@@ -53,7 +54,7 @@ def get_domain_of_type(domain_type, state):
     numeric_axis_regular = {
         "start": 20, "stop": 40, "num": 100
     }
-    
+
     label_missing = '0'
     label_single = '1'
     label_numeric_multi = f'{len(numeric_values)}'
@@ -125,7 +126,7 @@ def get_domain_of_type(domain_type, state):
                     y=numeric_values,
                     z=numeric_values
                 )
-                values = [list(item) for item in 
+                values = [list(item) for item in
                           zip(*[vals_by_axis[c] for c in coordinates])]
             elif info.data_type == 'polygon':
                 values = [
@@ -143,7 +144,7 @@ def get_domain_of_type(domain_type, state):
                 labels.append(f"c={count}")
             else:
                 assert False, "Invalid composite cardinality"
-            
+
             axes[name] = {
                 "dataType": info.data_type,
                 "coordinates": coordinates,
@@ -199,10 +200,11 @@ def get_domain_of_type(domain_type, state):
         "axes": axes,
         "referencing": referencing
     }
-    
+
     label = ','.join(labels)
 
     return domain, label
+
 
 if __name__ == "__main__":
     this_dir = Path(__file__).parent

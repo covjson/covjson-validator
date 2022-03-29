@@ -5,6 +5,7 @@ from jsonschema.exceptions import ValidationError
 
 pytestmark = pytest.mark.schema("/schemas/tiledNdArray")
 
+
 def get_example_tiled_ndarray():
     return {
         "type" : "TiledNdArray",
@@ -22,6 +23,7 @@ def get_example_tiled_ndarray():
             "urlTemplate": "http://example.com/c/{y}-{x}.covjson"
         }]
     }
+
 
 def test_valid_float_tiled_ndarray(validator):
     ''' Valid: A tiled ndarray with float data type '''
@@ -204,10 +206,9 @@ def test_incorrect_url_template_type(validator):
 
     tiled_ndarray = get_example_tiled_ndarray()
     tiled_ndarray["tileSets"][0]["urlTemplate"] = \
-         [ tiled_ndarray["tileSets"][0]["urlTemplate"] ]
+        [ tiled_ndarray["tileSets"][0]["urlTemplate"] ]
     with pytest.raises(ValidationError):
         validator.validate(tiled_ndarray)
-
 
 
 # TODO test that "shape" and "axisNames" have the same length
