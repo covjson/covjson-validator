@@ -62,13 +62,17 @@ def load_domain_test_data():
                 DOMAINS[name] = domain
                 DOMAINS_BY_TYPE[domain_type][name] = domain
 
+
 load_domain_test_data()
 
 
 def pytest_addoption(parser):
-    parser.addoption("--exhaustive", action="store_true",
-                     help="run tests requesting a domain with all domains, " + \
-                          "irrespective of 'exhaustive' marker")
+    parser.addoption(
+        "--exhaustive",
+        action="store_true",
+        help=("run tests requesting a domain with all domains, "
+              "irrespective of 'exhaustive' marker")
+    )
 
 
 def pytest_configure(config):
@@ -86,6 +90,7 @@ def pytest_configure(config):
 @pytest.fixture
 def domain(request):
     return deepcopy(DOMAINS[request.param])
+
 
 for domain_type in DOMAINS_BY_TYPE.keys():
     fixture_name = f"{domain_type.lower()}_domain"
@@ -124,4 +129,3 @@ def get_domain():
     def _get_domain(domain_name):
         return deepcopy(DOMAINS[domain_name])
     return _get_domain
-

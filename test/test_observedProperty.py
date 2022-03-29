@@ -5,6 +5,7 @@ from jsonschema.exceptions import ValidationError
 
 pytestmark = pytest.mark.schema("/schemas/observedProperty")
 
+
 def test_valid_minimal_observed_property(validator):
     ''' Tests an example of a valid minimal i18n object '''
 
