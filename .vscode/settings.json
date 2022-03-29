@@ -1,0 +1,13 @@
+{
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--extend-ignore=E201,E202,E203",
+        "--max-line-length=120"
+    ],
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "--rootdir",
+        "${workspaceFolder}/test"
+    ],
+    "python.terminal.executeInFileDir": true
+}
