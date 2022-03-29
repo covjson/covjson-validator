@@ -13,11 +13,11 @@ N.B. Make sure to install requirements via `pip`, not `conda` (at the time of wr
 ## Running the validator
 
 ```sh
-python tools/validator.py coverage.covjson
+python tools/validator.py my.covjson
 ```
 
 ## Testing the validator
-```
+```sh
 python -m pytest
 ```
 
