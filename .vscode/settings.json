@@ -9,5 +9,6 @@
         "--rootdir",
         "${workspaceFolder}/test"
     ],
-    "python.terminal.executeInFileDir": true
+    "python.terminal.executeInFileDir": true,
+    "python.testing.pytestPath": "python -m pytest"
 }
