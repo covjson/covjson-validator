@@ -4,7 +4,7 @@ from pathlib import Path
 import shutil
 import exhaust
 
-from compact_json import CompactJSONEncoder
+from .compact_json import CompactJSONEncoder
 
 Spec = namedtuple('Spec', ['x', 'y', 'z', 't', 'composite'])
 C = namedtuple('Composite', ['cardinality', 'data_type', 'coordinates'])
