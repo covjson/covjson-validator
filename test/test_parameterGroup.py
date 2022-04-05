@@ -5,6 +5,7 @@ from jsonschema.exceptions import ValidationError
 
 pytestmark = pytest.mark.schema("/schemas/parameterGroup")
 
+
 def get_example_parameter_group():
     return {
         "type": "ParameterGroup",

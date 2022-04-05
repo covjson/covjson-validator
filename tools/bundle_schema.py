@@ -7,9 +7,10 @@
 # written in this repository and is not intended to be used elsewhere.
 
 import argparse
-import os
 import json
 import copy
+
+from .validator import create_schema_store
 
 JSON_SCHEMA_2019_09 = "http://json-schema.org/2019-09/schema"
 JSON_SCHEMA_2020_12 = "http://json-schema.org/2020-12/schema"
@@ -17,27 +18,6 @@ SUPPORTED_SCHEMA_DIALECTS = [
     JSON_SCHEMA_2019_09,
     JSON_SCHEMA_2020_12,
 ]
-
-def create_schema_store():
-    ''' Creates a store that maps schema ids to schema documents '''
-
-    # Find the directory with all the schemas in
-    # TODO: find a neater way to get the file path
-    schema_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../schemas')
-
-    # Load all the schemas from this directory into the store
-    schema_store = {}
-    for f in os.scandir(schema_dir):
-        if f.is_file() and f.path.endswith(".json"):
-            abspath = os.path.abspath(f.path)
-            with open(abspath) as schema_file:
-                schema = json.load(schema_file)
-            try:
-                schema_store[schema["$id"]] = schema
-            except KeyError:
-                raise KeyError("$id not present in schema " + abspath)
-
-    return schema_store
 
 
 def walk_dict(obj, match_key, fn):
@@ -62,15 +42,16 @@ def bundle_schema(schema_store, root_schema_id):
     if dialect is not None:
         assert dialect in SUPPORTED_SCHEMA_DIALECTS, \
             f"Root schema dialect must be one of {SUPPORTED_SCHEMA_DIALECTS}"
-    
+
     # Locate referenced schemas recursively
     refs = set()
     ref_key = "$ref"
+
     def record_schema_reference(obj, key, value):
         assert key == ref_key
         if value in schema_store:
             refs.add(value)
-    
+
     done = set()
     todo = set([root_schema_id])
     while todo:
@@ -98,7 +79,7 @@ if __name__ == "__main__":
     parser.add_argument('--root', default='/schemas/coveragejson')
     parser.add_argument('--out', default='bundle.json')
     args = parser.parse_args()
-    
+
     store = create_schema_store()
     schema = bundle_schema(store, args.root)
 

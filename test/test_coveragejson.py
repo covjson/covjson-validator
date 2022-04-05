@@ -3,10 +3,10 @@
 import pytest
 from jsonschema.exceptions import ValidationError
 
-from test_ndArray import get_example_ndarray
-from test_tiledNdArray import get_example_tiled_ndarray
-from test_coverage import get_sample_coverage
-from test_coverageCollection import get_sample_coverage_collection
+from .test_ndArray import get_example_ndarray
+from .test_tiledNdArray import get_example_tiled_ndarray
+from .test_coverage import get_sample_coverage
+from .test_coverageCollection import get_sample_coverage_collection
 
 pytestmark = pytest.mark.schema("/schemas/coveragejson")
 
@@ -65,4 +65,3 @@ def test_misspelled_type(validator, get_domain):
     domain["type"] = "Doman"
     with pytest.raises(ValidationError):
         validator.validate(domain)
-

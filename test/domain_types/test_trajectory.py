@@ -5,6 +5,7 @@ from jsonschema.exceptions import ValidationError
 
 pytestmark = pytest.mark.schema("/schemas/domain")
 
+
 @pytest.mark.exhaustive
 def test_valid_trajectory_domain(validator, trajectory_domain):
     ''' Tests an example of a Trajectory domain '''

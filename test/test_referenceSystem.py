@@ -7,6 +7,7 @@ from jsonschema.exceptions import ValidationError
 
 pytestmark = pytest.mark.schema("/schemas/referenceSystem")
 
+
 def test_geographic_rs(validator):
     ''' Tests a minimal geographic RS '''
 

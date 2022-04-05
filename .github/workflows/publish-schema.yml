@@ -26,10 +26,10 @@ jobs:
       run: mkdir dist
       
     - name: Bundle schema
-      run: python tools/bundle_schema.py --out dist/schema.json
+      run: python -m tools.bundle_schema --out dist/schema.json
     
     - name: Downgrade schema to draft-07
-      run: python tools/downgrade_schema_to_draft07.py dist/schema.json
+      run: python -m tools.downgrade_schema_to_draft07 dist/schema.json
     
     - name: Publish to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3

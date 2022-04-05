@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     with open(args.covjson_path, encoding="utf-8") as f:
         obj = json.load(f)
-    
+
     validator = create_custom_validator("/schemas/coveragejson")
     validator.validate(obj)
     print("Valid!")

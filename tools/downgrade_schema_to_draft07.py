@@ -29,14 +29,14 @@ def walk_dict(obj, match_key, fn):
 
 def downgrade_schema_to_draft07(root_schema):
     ''' Downgrades a schema to draft-07 JSON Schema dialect '''
-    
+
     root_schema = copy.deepcopy(root_schema)
 
     schema_key = "$schema"
     if root_schema.get(schema_key) == JSON_SCHEMA_DRAFT_07:
         print("Schema is already in draft-07 dialect")
         return root_schema
-    
+
     # Change dialect declaration
     root_schema[schema_key] = JSON_SCHEMA_DRAFT_07
 
@@ -47,6 +47,7 @@ def downgrade_schema_to_draft07(root_schema):
 
     defs_key = "$defs"
     id_key = "$id"
+
     def move_defs(obj, key, value):
         assert key == defs_key
         schema_id_prefix = "/schemas/"
@@ -58,12 +59,13 @@ def downgrade_schema_to_draft07(root_schema):
                 f"Duplicate definition name '{name}'"
             definitions[name] = schema
         del obj[defs_key]
-    
+
     walk_dict(root_schema, defs_key, move_defs)
     root_schema[definitions_key] = dict(sorted(definitions.items()))
-    
+
     # Change all "$ref" values to use JSON pointer syntax
     ref_key = "$ref"
+
     def patch_ref_json_pointer(obj, key, value):
         assert key == ref_key
         definitions_prefix = "#/definitions/"
@@ -119,7 +121,7 @@ def downgrade_schema_to_draft07(root_schema):
     # Validate against the draft-07 meta schema
     # This will not catch all errors, but it is a good start
     jsonschema.Draft7Validator.check_schema(root_schema)
-    
+
     return root_schema
 
 
@@ -131,7 +133,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.output_path is None:
         args.output_path = args.input_path
-    
+
     with open(args.input_path) as f:
         schema = json.load(f)
 

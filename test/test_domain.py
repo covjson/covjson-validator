@@ -10,7 +10,7 @@ pytestmark = pytest.mark.schema("/schemas/domain")
 
 def test_valid_anonymous_domain(validator, domain):
     ''' Tests a domain with no domainType (valid, but not recommended) '''
-    
+
     del domain["domainType"]
     validator.validate(domain)
 
@@ -119,4 +119,3 @@ def test_wrong_axis_type(validator, domain):
 #  to horizontal spatial coordinates, "z" to vertical spatial
 #  coordinates, and all of "x", "y", and "z" MUST be referenced
 #  by a spatial coordinate reference system."
-
