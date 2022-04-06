@@ -45,6 +45,22 @@ def test_empty_y_axis(validator, point_domain):
         validator.validate(point_domain)
 
 
+def test_empty_z_axis(validator, point_domain):
+    ''' Invalid: Point domain with empty 'z' axis '''
+
+    point_domain["axes"]["z"] = { "values" : [] }
+    with pytest.raises(ValidationError):
+        validator.validate(point_domain)
+
+
+def test_empty_t_axis(validator, point_domain):
+    ''' Invalid: Point domain with empty 't' axis '''
+
+    point_domain["axes"]["t"] = { "values" : [] }
+    with pytest.raises(ValidationError):
+        validator.validate(point_domain)
+
+
 def test_multivalued_x_axis(validator, point_domain):
     ''' Invalid: Point domain with multi-valued 'x' axis '''
 

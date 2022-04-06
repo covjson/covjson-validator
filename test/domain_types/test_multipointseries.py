@@ -21,10 +21,26 @@ def test_missing_composite_axis(validator, multipointseries_domain):
         validator.validate(multipointseries_domain)
 
 
+def test_empty_composite_axis(validator, multipointseries_domain):
+    ''' Invalid: MultiPointSeries domain with empty 'composite' axis '''
+
+    multipointseries_domain["axes"]["composite"] = { "values" : [] }
+    with pytest.raises(ValidationError):
+        validator.validate(multipointseries_domain)
+
+
 def test_missing_t_axis(validator, multipointseries_domain):
     ''' Invalid: MultiPointSeries domain with missing 't' axis '''
 
     del multipointseries_domain["axes"]["t"]
+    with pytest.raises(ValidationError):
+        validator.validate(multipointseries_domain)
+
+
+def test_empty_t_axis(validator, multipointseries_domain):
+    ''' Invalid: MultiPointSeries domain with empty 't' axis '''
+
+    multipointseries_domain["axes"]["t"] = { "values" : [] }
     with pytest.raises(ValidationError):
         validator.validate(multipointseries_domain)
 

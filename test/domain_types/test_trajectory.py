@@ -21,6 +21,14 @@ def test_missing_composite_axis(validator, trajectory_domain):
         validator.validate(trajectory_domain)
 
 
+def test_empty_composite_axis(validator, trajectory_domain):
+    ''' Invalid: MultiPointSeries domain with empty 'composite' axis '''
+
+    trajectory_domain["axes"]["composite"] = { "values" : [] }
+    with pytest.raises(ValidationError):
+        validator.validate(trajectory_domain)
+
+
 def test_wrong_composite_axis_type(validator, trajectory_domain):
     ''' Invalid: Trajectory domain with primitive instead of tuple axis '''
 
@@ -36,6 +44,14 @@ def test_extra_axis(validator, trajectory_domain):
 
     trajectory_domain["axes"]["composite2"] = \
         trajectory_domain["axes"]["composite"]
+    with pytest.raises(ValidationError):
+        validator.validate(trajectory_domain)
+
+
+def test_empty_z_axis(validator, trajectory_domain):
+    ''' Invalid: Trajectory domain with empty 'z' axis '''
+
+    trajectory_domain["axes"]["z"] = { "values" : [] }
     with pytest.raises(ValidationError):
         validator.validate(trajectory_domain)
 

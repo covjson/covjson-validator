@@ -53,6 +53,14 @@ def test_empty_y_axis(validator, pointseries_domain):
         validator.validate(pointseries_domain)
 
 
+def test_empty_z_axis(validator, pointseries_domain):
+    ''' Invalid: PointSeries domain with empty 'z' axis '''
+
+    pointseries_domain["axes"]["z"] = { "values" : [] }
+    with pytest.raises(ValidationError):
+        validator.validate(pointseries_domain)
+
+
 def test_empty_t_axis(validator, pointseries_domain):
     ''' Invalid: PointSeries domain with empty 't' axis '''
 

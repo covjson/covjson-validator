@@ -21,6 +21,14 @@ def test_missing_composite_axis(validator, multipoint_domain):
         validator.validate(multipoint_domain)
 
 
+def test_empty_composite_axis(validator, multipoint_domain):
+    ''' Invalid: MultiPoint domain with empty 'composite' axis '''
+
+    multipoint_domain["axes"]["composite"] = { "values" : [] }
+    with pytest.raises(ValidationError):
+        validator.validate(multipoint_domain)
+
+
 def test_wrong_composite_axis_type(validator, multipoint_domain):
     ''' Invalid: MultiPoint domain with primitive instead of tuple axis '''
 
@@ -44,6 +52,14 @@ def test_multivalued_t_axis(validator, multipoint_domain):
     ''' Invalid: MultiPoint domain with multi-valued 't' axis '''
 
     multipoint_domain["axes"]["t"] = { "values" : ["2008-01-01T04:00:00Z", "2008-01-01T05:00:00Z"] }
+    with pytest.raises(ValidationError):
+        validator.validate(multipoint_domain)
+
+
+def test_empty_t_axis(validator, multipoint_domain):
+    ''' Invalid: MultiPoint domain with empty 't' axis '''
+
+    multipoint_domain["axes"]["t"] = { "values" : [] }
     with pytest.raises(ValidationError):
         validator.validate(multipoint_domain)
 
