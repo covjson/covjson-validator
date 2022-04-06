@@ -135,6 +135,26 @@
                             }
                         }
                     }
+                },
+                {
+                    "if": { "properties" : { "domainType" : { "const" : "MultiPoint" } } },
+                    "then":
+                    {
+                        "description" : "MultiPoint domain: mandatory composite axis, optional t axis",
+                        "properties" :
+                        { 
+                            "axes" :
+                            {
+                                "properties" :
+                                {
+                                    "composite" : { "$ref" : "/schemas/tupleValuesAxis" },
+                                    "t" : { "$ref" : "/schemas/stringSingleValueAxis" }
+                                },
+                                "required" : [ "composite" ],
+                                "additionalProperties" : false
+                            }
+                        }
+                    }
                 }
             ]
         }
