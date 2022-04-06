@@ -11,7 +11,7 @@ C = namedtuple('Composite', ['cardinality', 'data_type', 'coordinates'])
 DOMAIN_TYPES = {
     'Grid':               Spec('+', '+', '[+]', '[+]', ''),
     'VerticalProfile':    Spec('1', '1',  '+',  '[1]', ''),
-    # 'PointSeries':        Spec('1', '1', '[1]',  '+',  ''),
+    'PointSeries':        Spec('1', '1', '[1]',  '+',  ''),
     'Point':              Spec('1', '1', '[1]', '[1]', ''),
     # 'MultiPointSeries':   Spec('',  '',  '',     '+',  C('+', 'tuple', ['xyz', 'xy'])),
     # 'MultiPoint':         Spec('',  '',  '',    '[1]', C('+', 'tuple', ['xyz', 'xy'])),

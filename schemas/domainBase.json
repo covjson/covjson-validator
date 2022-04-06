@@ -113,6 +113,28 @@
                             }
                         }
                     }
+                },
+                {
+                    "if": { "properties" : { "domainType" : { "const" : "PointSeries" } } },
+                    "then":
+                    {
+                        "description" : "PointSeries domain: mandatory x, y and t axis, optional z axis",
+                        "properties" :
+                        { 
+                            "axes" :
+                            {
+                                "properties" :
+                                {
+                                    "x" : { "$ref" : "/schemas/numericSingleValueAxis" },
+                                    "y" : { "$ref" : "/schemas/numericSingleValueAxis" },
+                                    "z" : { "$ref" : "/schemas/numericSingleValueAxis" },
+                                    "t" : { "$ref" : "/schemas/stringValuesAxis" }
+                                },
+                                "required" : [ "x", "y", "t" ],
+                                "additionalProperties" : false
+                            }
+                        }
+                    }
                 }
             ]
         }
