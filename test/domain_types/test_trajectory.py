@@ -40,7 +40,14 @@ def test_extra_axis(validator, trajectory_domain):
         validator.validate(trajectory_domain)
 
 
-# TODO test optional 'z' axis has single coordinate only
+def test_multivalued_z_axis(validator, trajectory_domain):
+    ''' Invalid: Trajectory domain with multi-valued 'z' axis '''
+
+    trajectory_domain["axes"]["z"] = { "values" : [1, 2] }
+    with pytest.raises(ValidationError):
+        validator.validate(trajectory_domain)
+
+
 # TODO test coordinate identifiers of 'composite' axis
 #      to be "t","x","y","z" or "t","x","y"
 # TODO test there cannot be both 'z' in 'composite' and a 'z' axis

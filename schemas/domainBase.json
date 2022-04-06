@@ -62,7 +62,7 @@
                                 "properties" :
                                 {
                                     "composite" : { "$ref" : "/schemas/tupleValuesAxis" },
-                                    "z" : { "$ref" : "/schemas/numericAxis" }
+                                    "z" : { "$ref" : "/schemas/numericSingleValueAxis"}
                                 },
                                 "required" : [ "composite" ],
                                 "additionalProperties" : false
