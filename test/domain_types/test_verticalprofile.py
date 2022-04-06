@@ -75,3 +75,12 @@ def test_multivalued_y_axis(validator, verticalprofile_domain):
     verticalprofile_domain["axes"]["y"] = { "values" : [1, 2] }
     with pytest.raises(ValidationError):
         validator.validate(verticalprofile_domain)
+
+
+def test_extra_axis(validator, verticalprofile_domain):
+    ''' Invalid: VerticalProfile domain with unrecognised extra axis '''
+
+    verticalprofile_domain["axes"]["x2"] = \
+        verticalprofile_domain["axes"]["x"]
+    with pytest.raises(ValidationError):
+        validator.validate(verticalprofile_domain)
