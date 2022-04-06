@@ -69,6 +69,28 @@
                             }
                         }
                     }
+                },
+                {
+                    "if": { "properties" : { "domainType" : { "const" : "VerticalProfile" } } },
+                    "then":
+                    {
+                        "description" : "Vertical Profile domain: mandatory x, y and z axis and optional t axis",
+                        "properties" :
+                        { 
+                            "axes" :
+                            {
+                                "properties" :
+                                {
+                                    "x" : { "$ref" : "/schemas/numericSingleValueAxis"},
+                                    "y" : { "$ref" : "/schemas/numericSingleValueAxis"},
+                                    "z" : { "$ref" : "/schemas/numericAxis" },
+                                    "t" : { "$ref" : "/schemas/stringValuesAxis" }
+                                },
+                                "required" : [ "x", "y", "z" ],
+                                "additionalProperties" : false
+                            }
+                        }
+                    }
                 }
             ]
         }
