@@ -20,7 +20,7 @@ DOMAIN_TYPES = {
     # 'MultiPolygonSeries': Spec('',  '',  '[1]',  '+',  C('+', 'polygon', ['xy'])),
     # 'MultiPolygon':       Spec('',  '',  '[1]',  '+',  C('+', 'polygon', ['xy'])),
     'Trajectory':         Spec('',  '',  '[1]',  '',   C('+', 'tuple', ['txyz', 'txy'])),
-    # 'Section':            Spec('',  '',   '+',   '',   C('+', 'tuple', ['txy'])),
+    'Section':            Spec('',  '',   '+',   '',   C('+', 'tuple', ['txy'])),
 }
 
 

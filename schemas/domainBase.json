@@ -175,6 +175,46 @@
                             }
                         }
                     }
+                },
+                {
+                    "if": { "properties" : { "domainType" : { "const" : "Section" } } },
+                    "then":
+                    {
+                        "description" : "Section domain: mandatory composite and z axes",
+                        "properties" :
+                        { 
+                            "axes" :
+                            {
+                                "properties" :
+                                {
+                                    "composite" :
+                                    {
+                                        "allOf" :
+                                        [
+                                            { "$ref": "/schemas/tupleValuesAxis" },
+                                            {
+                                                "properties" :
+                                                {
+                                                    "values" :
+                                                    {
+                                                        "items" :
+                                                        {
+                                                            "description" : "In a Section, tuples always have 3 values",
+                                                            "minItems" : 3,
+                                                            "maxItems" : 3
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "z" : { "$ref" : "/schemas/numericAxis" }
+                                },
+                                "required" : [ "composite", "z" ],
+                                "additionalProperties" : false
+                            }
+                        }
+                    }
                 }
             ]
         }
