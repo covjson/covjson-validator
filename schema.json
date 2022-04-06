@@ -433,6 +433,42 @@
                   }
                 }
               }
+            },
+            {
+              "if": {
+                "properties": {
+                  "domainType": {
+                    "const": "VerticalProfile"
+                  }
+                }
+              },
+              "then": {
+                "description": "Vertical Profile domain: mandatory x, y and z axis and optional t axis",
+                "properties": {
+                  "axes": {
+                    "properties": {
+                      "x": {
+                        "$ref": "#/definitions/numericSingleValueAxis"
+                      },
+                      "y": {
+                        "$ref": "#/definitions/numericSingleValueAxis"
+                      },
+                      "z": {
+                        "$ref": "#/definitions/numericAxis"
+                      },
+                      "t": {
+                        "$ref": "#/definitions/stringValuesAxis"
+                      }
+                    },
+                    "required": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
             }
           ]
         }
@@ -632,6 +668,21 @@
         "num"
       ],
       "additionalProperties": false
+    },
+    "numericSingleValueAxis": {
+      "description": "Axis defined by single numeric value",
+      "allOf": [
+        {
+          "$ref": "#/definitions/numericValuesAxis"
+        },
+        {
+          "properties": {
+            "values": {
+              "maxItems": 1
+            }
+          }
+        }
+      ]
     },
     "numericValuesAxis": {
       "description": "Axis defined by list of numeric axis values and optional bounds",
