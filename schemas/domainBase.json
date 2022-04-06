@@ -91,6 +91,28 @@
                             }
                         }
                     }
+                },
+                {
+                    "if": { "properties" : { "domainType" : { "const" : "Point" } } },
+                    "then":
+                    {
+                        "description" : "Point domain: mandatory x and y axis, optional z and t axis",
+                        "properties" :
+                        { 
+                            "axes" :
+                            {
+                                "properties" :
+                                {
+                                    "x" : { "$ref" : "/schemas/numericSingleValueAxis" },
+                                    "y" : { "$ref" : "/schemas/numericSingleValueAxis" },
+                                    "z" : { "$ref" : "/schemas/numericSingleValueAxis" },
+                                    "t" : { "$ref" : "/schemas/stringSingleValueAxis" }
+                                },
+                                "required" : [ "x", "y" ],
+                                "additionalProperties" : false
+                            }
+                        }
+                    }
                 }
             ]
         }
