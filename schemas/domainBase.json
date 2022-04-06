@@ -84,7 +84,7 @@
                                     "x" : { "$ref" : "/schemas/numericSingleValueAxis"},
                                     "y" : { "$ref" : "/schemas/numericSingleValueAxis"},
                                     "z" : { "$ref" : "/schemas/numericAxis" },
-                                    "t" : { "$ref" : "/schemas/stringValuesAxis" }
+                                    "t" : { "$ref" : "/schemas/stringSingleValueAxis" }
                                 },
                                 "required" : [ "x", "y", "z" ],
                                 "additionalProperties" : false

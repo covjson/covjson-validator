@@ -61,6 +61,14 @@ def test_empty_z_axis(validator, verticalprofile_domain):
         validator.validate(verticalprofile_domain)
 
 
+def test_empty_t_axis(validator, verticalprofile_domain):
+    ''' Invalid: VerticalProfile domain with empty 't' axis '''
+
+    verticalprofile_domain["axes"]["t"] = { "values" : [] }
+    with pytest.raises(ValidationError):
+        validator.validate(verticalprofile_domain)
+
+
 def test_multivalued_x_axis(validator, verticalprofile_domain):
     ''' Invalid: VerticalProfile domain with multi-valued 'x' axis '''
 
@@ -73,6 +81,15 @@ def test_multivalued_y_axis(validator, verticalprofile_domain):
     ''' Invalid: VerticalProfile domain with multi-valued 'y' axis '''
 
     verticalprofile_domain["axes"]["y"] = { "values" : [1, 2] }
+    with pytest.raises(ValidationError):
+        validator.validate(verticalprofile_domain)
+
+
+# TODO: this is not explicity forbidden in the spec, but should be - see #96
+def test_multivalued_t_axis(validator, verticalprofile_domain):
+    ''' Invalid: VerticalProfile domain with multi-valued 't' axis '''
+
+    verticalprofile_domain["axes"]["t"] = { "values" : ["2008-01-01T04:00:00Z", "2008-01-01T05:00:00Z"] }
     with pytest.raises(ValidationError):
         validator.validate(verticalprofile_domain)
 
