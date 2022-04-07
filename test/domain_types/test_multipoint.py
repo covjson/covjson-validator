@@ -29,6 +29,30 @@ def test_empty_composite_axis(validator, multipoint_domain):
         validator.validate(multipoint_domain)
 
 
+def test_composite_axis_with_1_value(validator, multipoint_domain):
+    ''' Invalid: MultiPoint domain with composite axis with tuples of length 1 '''
+
+    multipoint_domain["axes"]["composite"]["values"] = [
+        [1],
+        [2],
+        [3]
+    ]
+    with pytest.raises(ValidationError):
+        validator.validate(multipoint_domain)
+
+
+def test_composite_axis_with_4_values(validator, multipoint_domain):
+    ''' Invalid: MultiPoint domain with composite axis with tuples of length 4 '''
+
+    multipoint_domain["axes"]["composite"]["values"] = [
+        ["2008-01-01T04:00:00Z", 1, 1, 1],
+        ["2008-01-01T05:00:00Z", 2, 2, 2],
+        ["2008-01-01T06:00:00Z", 3, 3, 3]
+    ]
+    with pytest.raises(ValidationError):
+        validator.validate(multipoint_domain)
+
+
 def test_wrong_composite_axis_type(validator, multipoint_domain):
     ''' Invalid: MultiPoint domain with primitive instead of tuple axis '''
 

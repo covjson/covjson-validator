@@ -55,6 +55,30 @@ def test_wrong_composite_axis_type(validator, multipointseries_domain):
         validator.validate(multipointseries_domain)
 
 
+def test_composite_axis_with_1_value(validator, multipointseries_domain):
+    ''' Invalid: MultiPointSeries domain with composite axis with tuples of length 1 '''
+
+    multipointseries_domain["axes"]["composite"]["values"] = [
+        [1],
+        [2],
+        [3]
+    ]
+    with pytest.raises(ValidationError):
+        validator.validate(multipointseries_domain)
+
+
+def test_composite_axis_with_4_values(validator, multipointseries_domain):
+    ''' Invalid: MultiPointSeries domain with composite axis with tuples of length 4 '''
+
+    multipointseries_domain["axes"]["composite"]["values"] = [
+        ["2008-01-01T04:00:00Z", 1, 1, 1],
+        ["2008-01-01T05:00:00Z", 2, 2, 2],
+        ["2008-01-01T06:00:00Z", 3, 3, 3]
+    ]
+    with pytest.raises(ValidationError):
+        validator.validate(multipointseries_domain)
+
+
 def test_extra_axis(validator, multipointseries_domain):
     ''' Invalid: MultiPointSeries domain with unrecognised extra axis '''
 

@@ -61,7 +61,27 @@
                             {
                                 "properties" :
                                 {
-                                    "composite" : { "$ref" : "/schemas/tupleValuesAxis" },
+                                    "composite" :
+                                    {
+                                        "allOf" :
+                                        [
+                                            { "$ref": "/schemas/tupleValuesAxis" },
+                                            {
+                                                "properties" :
+                                                {
+                                                    "values" :
+                                                    {
+                                                        "items" :
+                                                        {
+                                                            "$comment" : "In a Trajectory, tuples always have 3 (tyx) or 4 (tzyx) values",
+                                                            "minItems" : 3,
+                                                            "maxItems" : 4
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
                                     "z" : { "$ref" : "/schemas/numericSingleValueAxis"}
                                 },
                                 "required" : [ "composite" ],
@@ -147,7 +167,27 @@
                             {
                                 "properties" :
                                 {
-                                    "composite" : { "$ref" : "/schemas/tupleValuesAxis" },
+                                    "composite" :
+                                    {
+                                        "allOf" :
+                                        [
+                                            { "$ref": "/schemas/tupleValuesAxis" },
+                                            {
+                                                "properties" :
+                                                {
+                                                    "values" :
+                                                    {
+                                                        "items" :
+                                                        {
+                                                            "$comment" : "In a MultiPoint, tuples always have 2 (xy) or 3 values (xyz)",
+                                                            "minItems" : 2,
+                                                            "maxItems" : 3
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
                                     "t" : { "$ref" : "/schemas/stringSingleValueAxis" }
                                 },
                                 "required" : [ "composite" ],
@@ -167,7 +207,27 @@
                             {
                                 "properties" :
                                 {
-                                    "composite" : { "$ref" : "/schemas/tupleValuesAxis" },
+                                    "composite" :
+                                    {
+                                        "allOf" :
+                                        [
+                                            { "$ref": "/schemas/tupleValuesAxis" },
+                                            {
+                                                "properties" :
+                                                {
+                                                    "values" :
+                                                    {
+                                                        "items" :
+                                                        {
+                                                            "$comment" : "In a MultiPointSeries, tuples always have 2 (xy) or 3 values (xyz)",
+                                                            "minItems" : 2,
+                                                            "maxItems" : 3
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
                                     "t" : { "$ref" : "/schemas/stringValuesAxis" }
                                 },
                                 "required" : [ "composite", "t" ],
@@ -199,7 +259,7 @@
                                                     {
                                                         "items" :
                                                         {
-                                                            "description" : "In a Section, tuples always have 3 values",
+                                                            "$comment" : "In a Section, tuples always have 3 values (txy)",
                                                             "minItems" : 3,
                                                             "maxItems" : 3
                                                         }

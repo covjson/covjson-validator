@@ -22,7 +22,7 @@ def test_missing_composite_axis(validator, trajectory_domain):
 
 
 def test_empty_composite_axis(validator, trajectory_domain):
-    ''' Invalid: MultiPointSeries domain with empty 'composite' axis '''
+    ''' Invalid: Trajectory domain with empty 'composite' axis '''
 
     trajectory_domain["axes"]["composite"] = { "values" : [] }
     with pytest.raises(ValidationError):
@@ -35,6 +35,30 @@ def test_wrong_composite_axis_type(validator, trajectory_domain):
     trajectory_domain["axes"]["composite"] = {
         "values": [1, 2, 3]
     }
+    with pytest.raises(ValidationError):
+        validator.validate(trajectory_domain)
+
+
+def test_composite_axis_with_2_values(validator, trajectory_domain):
+    ''' Invalid: Trajectory domain with composite axis with tuples of length 2 '''
+
+    trajectory_domain["axes"]["composite"]["values"] = [
+        ["2008-01-01T04:00:00Z", 1],
+        ["2008-01-01T05:00:00Z", 2],
+        ["2008-01-01T06:00:00Z", 3]
+    ]
+    with pytest.raises(ValidationError):
+        validator.validate(trajectory_domain)
+
+
+def test_composite_axis_with_5_values(validator, trajectory_domain):
+    ''' Invalid: Trajectory domain with composite axis with tuples of length 5 '''
+
+    trajectory_domain["axes"]["composite"]["values"] = [
+        ["2008-01-01T04:00:00Z", 1, 1, 1, 1],
+        ["2008-01-01T05:00:00Z", 2, 2, 2, 2],
+        ["2008-01-01T06:00:00Z", 3, 3, 3, 3]
+    ]
     with pytest.raises(ValidationError):
         validator.validate(trajectory_domain)
 
