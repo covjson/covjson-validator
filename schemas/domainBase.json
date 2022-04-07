@@ -355,6 +355,27 @@
                             }
                         }
                     }
+                },
+                {
+                    "if": { "properties" : { "domainType" : { "const" : "MultiPolygon" } } },
+                    "then":
+                    {
+                        "description" : "MultiPolygon domain: mandatory composite axis, optional z and t axes",
+                        "properties" :
+                        { 
+                            "axes" :
+                            {
+                                "properties" :
+                                {
+                                    "composite" : { "$ref": "/schemas/polygonValuesAxis" },
+                                    "z" : { "$ref" : "/schemas/numericSingleValueAxis" },
+                                    "t" : { "$ref" : "/schemas/stringSingleValueAxis" }
+                                },
+                                "required" : [ "composite" ],
+                                "additionalProperties" : false
+                            }
+                        }
+                    }
                 }
             ]
         }
