@@ -275,6 +275,46 @@
                             }
                         }
                     }
+                },
+                {
+                    "if": { "properties" : { "domainType" : { "const" : "Polygon" } } },
+                    "then":
+                    {
+                        "description" : "Polygon domain: mandatory composite axis, optional z and t axes",
+                        "properties" :
+                        { 
+                            "axes" :
+                            {
+                                "properties" :
+                                {
+                                    "composite" :
+                                    {
+                                        "allOf" :
+                                        [
+                                            { "$ref": "/schemas/polygonValuesAxis" },
+                                            {
+                                                "properties" :
+                                                {
+                                                    "values" :
+                                                    {
+                                                        "items" :
+                                                        {
+                                                            "$comment" : "There can only be one polygon in the axis",
+                                                            "maxItems" : 1
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "z" : { "$ref" : "/schemas/numericSingleValueAxis" },
+                                    "t" : { "$ref" : "/schemas/stringSingleValueAxis" }
+                                },
+                                "required" : [ "composite" ],
+                                "additionalProperties" : false
+                            }
+                        }
+                    }
                 }
             ]
         }
