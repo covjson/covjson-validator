@@ -315,6 +315,46 @@
                             }
                         }
                     }
+                },
+                {
+                    "if": { "properties" : { "domainType" : { "const" : "PolygonSeries" } } },
+                    "then":
+                    {
+                        "description" : "PolygonSeries domain: mandatory composite axis, optional z and t axes",
+                        "properties" :
+                        { 
+                            "axes" :
+                            {
+                                "properties" :
+                                {
+                                    "composite" :
+                                    {
+                                        "allOf" :
+                                        [
+                                            { "$ref": "/schemas/polygonValuesAxis" },
+                                            {
+                                                "properties" :
+                                                {
+                                                    "values" :
+                                                    {
+                                                        "items" :
+                                                        {
+                                                            "$comment" : "There can only be one polygon in the axis",
+                                                            "maxItems" : 1
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "z" : { "$ref" : "/schemas/numericSingleValueAxis" },
+                                    "t" : { "$ref" : "/schemas/stringValuesAxis" }
+                                },
+                                "required" : [ "composite" ],
+                                "additionalProperties" : false
+                            }
+                        }
+                    }
                 }
             ]
         }
