@@ -376,6 +376,27 @@
                             }
                         }
                     }
+                },
+                {
+                    "if": { "properties" : { "domainType" : { "const" : "MultiPolygonSeries" } } },
+                    "then":
+                    {
+                        "description" : "MultiPolygonSeries domain: mandatory composite axis, optional z and t axes",
+                        "properties" :
+                        { 
+                            "axes" :
+                            {
+                                "properties" :
+                                {
+                                    "composite" : { "$ref": "/schemas/polygonValuesAxis" },
+                                    "z" : { "$ref" : "/schemas/numericSingleValueAxis" },
+                                    "t" : { "$ref" : "/schemas/stringValuesAxis" }
+                                },
+                                "required" : [ "composite" ],
+                                "additionalProperties" : false
+                            }
+                        }
+                    }
                 }
             ]
         }
