@@ -47,17 +47,6 @@ def test_wrong_composite_axis_type2(validator, multipolygon_domain):
         validator.validate(multipolygon_domain)
 
 
-def test_composite_axis_with_2_values(validator, multipolygon_domain):
-    ''' Invalid: MultiPolygon domain with composite axis with two polygons '''
-
-    multipolygon_domain["axes"]["composite"]["values"] = [
-        [ [ [101.0, 01.0], [102.0, 0.0], [102.0, 2.0], [101.0, 2.0], [101.0, 1.0] ] ],
-        [ [ [101.0, 01.0], [102.0, 0.0], [102.0, 2.0], [101.0, 2.0], [101.0, 1.0] ] ]
-    ]
-    with pytest.raises(ValidationError):
-        validator.validate(multipolygon_domain)
-
-
 def test_wrong_data_type(validator, multipolygon_domain):
     ''' Invalid: MultiPolygon domain with wrong data type '''
 

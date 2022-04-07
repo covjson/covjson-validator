@@ -297,11 +297,8 @@
                                                 {
                                                     "values" :
                                                     {
-                                                        "items" :
-                                                        {
-                                                            "$comment" : "There can only be one polygon in the axis",
-                                                            "maxItems" : 1
-                                                        }
+                                                        "$comment" : "There can only be one polygon in the axis",
+                                                        "maxItems" : 1
                                                     }
                                                 }
                                             }
@@ -337,11 +334,8 @@
                                                 {
                                                     "values" :
                                                     {
-                                                        "items" :
-                                                        {
-                                                            "$comment" : "There can only be one polygon in the axis",
-                                                            "maxItems" : 1
-                                                        }
+                                                        "$comment" : "There can only be one polygon in the axis",
+                                                        "maxItems" : 1
                                                     }
                                                 }
                                             }

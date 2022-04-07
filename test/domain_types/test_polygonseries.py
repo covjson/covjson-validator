@@ -51,8 +51,8 @@ def test_composite_axis_with_2_values(validator, polygonseries_domain):
     ''' Invalid: PolygonSeries domain with composite axis with two polygons '''
 
     polygonseries_domain["axes"]["composite"]["values"] = [
-        [ [ [101.0, 01.0], [102.0, 0.0], [102.0, 2.0], [101.0, 2.0], [101.0, 1.0] ] ],
-        [ [ [101.0, 01.0], [102.0, 0.0], [102.0, 2.0], [101.0, 2.0], [101.0, 1.0] ] ]
+        [ [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ] ],
+        [ [ [101.0, 1.0], [102.0, 0.0], [102.0, 2.0], [101.0, 2.0], [101.0, 1.0] ] ]
     ]
     with pytest.raises(ValidationError):
         validator.validate(polygonseries_domain)
