@@ -11,16 +11,16 @@ C = namedtuple('Composite', ['cardinality', 'data_type', 'coordinates'])
 DOMAIN_TYPES = {
     'Grid':               Spec('+', '+', '[+]', '[+]', ''),
     'VerticalProfile':    Spec('1', '1',  '+',  '[1]', ''),
-    # 'PointSeries':        Spec('1', '1', '[1]',  '+',  ''),
-    # 'Point':              Spec('1', '1', '[1]', '[1]', ''),
-    # 'MultiPointSeries':   Spec('',  '',  '',     '+',  C('+', 'tuple', ['xyz', 'xy'])),
-    # 'MultiPoint':         Spec('',  '',  '',    '[1]', C('+', 'tuple', ['xyz', 'xy'])),
-    # 'PolygonSeries':      Spec('',  '',  '[1]',  '+',  C('1', 'polygon', ['xy'])),
-    # 'Polygon':            Spec('',  '',  '[1]', '[1]', C('1', 'polygon', ['xy'])),
-    # 'MultiPolygonSeries': Spec('',  '',  '[1]',  '+',  C('+', 'polygon', ['xy'])),
-    # 'MultiPolygon':       Spec('',  '',  '[1]',  '+',  C('+', 'polygon', ['xy'])),
+    'PointSeries':        Spec('1', '1', '[1]',  '+',  ''),
+    'Point':              Spec('1', '1', '[1]', '[1]', ''),
+    'MultiPointSeries':   Spec('',  '',  '',     '+',  C('+', 'tuple', ['xyz', 'xy'])),
+    'MultiPoint':         Spec('',  '',  '',    '[1]', C('+', 'tuple', ['xyz', 'xy'])),
+    'PolygonSeries':      Spec('',  '',  '[1]',  '+',  C('1', 'polygon', ['xy'])),
+    'Polygon':            Spec('',  '',  '[1]', '[1]', C('1', 'polygon', ['xy'])),
+    'MultiPolygonSeries': Spec('',  '',  '[1]',  '+',  C('+', 'polygon', ['xy'])),
+    'MultiPolygon':       Spec('',  '',  '[1]', '[1]', C('+', 'polygon', ['xy'])),
     'Trajectory':         Spec('',  '',  '[1]',  '',   C('+', 'tuple', ['txyz', 'txy'])),
-    # 'Section':            Spec('',  '',   '+',   '',   C('+', 'tuple', ['txy'])),
+    'Section':            Spec('',  '',   '+',   '',   C('+', 'tuple', ['txy'])),
 }
 
 

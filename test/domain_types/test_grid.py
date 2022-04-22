@@ -29,6 +29,38 @@ def test_missing_y_axis(validator, grid_domain):
         validator.validate(grid_domain)
 
 
+def test_empty_x_axis(validator, grid_domain):
+    ''' Invalid: Grid domain with empty 'x' axis '''
+
+    grid_domain["axes"]["x"] = { "values" : [] }
+    with pytest.raises(ValidationError):
+        validator.validate(grid_domain)
+
+
+def test_empty_y_axis(validator, grid_domain):
+    ''' Invalid: Grid domain with empty 'y' axis '''
+
+    grid_domain["axes"]["y"] = { "values" : [] }
+    with pytest.raises(ValidationError):
+        validator.validate(grid_domain)
+
+
+def test_empty_z_axis(validator, grid_domain):
+    ''' Invalid: Grid domain with empty 'z' axis '''
+
+    grid_domain["axes"]["z"] = { "values" : [] }
+    with pytest.raises(ValidationError):
+        validator.validate(grid_domain)
+
+
+def test_empty_t_axis(validator, grid_domain):
+    ''' Invalid: Grid domain with empty 't' axis '''
+
+    grid_domain["axes"]["t"] = { "values" : [] }
+    with pytest.raises(ValidationError):
+        validator.validate(grid_domain)
+
+
 def test_extra_multi_coordinate_axis(validator, grid_domain):
     ''' Invalid: Grid domain with unrecognised multi-coordinate axis '''
 
