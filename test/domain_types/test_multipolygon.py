@@ -96,4 +96,4 @@ def test_multivalued_t_axis(validator, multipolygon_domain):
         validator.validate(multipolygon_domain)
 
 
-# TODO do the `coordinates` have to be "x", "y" or can they also be "y", "x"?
+# TODO check coordinates are "x","y", in that order

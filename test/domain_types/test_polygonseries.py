@@ -99,4 +99,4 @@ def test_empty_t_axis(validator, polygonseries_domain):
         validator.validate(polygonseries_domain)
 
 
-# TODO do the `coordinates` have to be "x", "y" or can they also be "y", "x"?
+# TODO check coordinates are "x","y"

@@ -73,7 +73,7 @@
                                                     {
                                                         "items" :
                                                         {
-                                                            "$comment" : "In a Trajectory, tuples always have 3 (tyx) or 4 (tzyx) values",
+                                                            "$comment" : "In a Trajectory, tuples always have 3 (txy) or 4 (txyz) values",
                                                             "minItems" : 3,
                                                             "maxItems" : 4
                                                         }
