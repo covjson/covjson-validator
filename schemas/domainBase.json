@@ -183,6 +183,14 @@
                                                             "minItems" : 2,
                                                             "maxItems" : 3
                                                         }
+                                                    },
+                                                    "coordinates": 
+                                                    {
+                                                        "enum":
+                                                        [
+                                                            ["x", "y", "z"],
+                                                            ["x", "y"]
+                                                        ]
                                                     }
                                                 }
                                             }

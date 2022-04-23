@@ -63,6 +63,14 @@ def test_wrong_composite_axis_type(validator, multipoint_domain):
         validator.validate(multipoint_domain)
 
 
+def test_wrong_composite_axis_coordinates(validator, multipoint_domain):
+    ''' Invalid: MultiPoint domain with invalid coordinates '''
+
+    multipoint_domain["axes"]["composite"]["coordinates"] = ["y", "x"]
+    with pytest.raises(ValidationError):
+        validator.validate(multipoint_domain)
+
+
 def test_extra_axis(validator, multipoint_domain):
     ''' Invalid: MultiPoint domain with unrecognised extra axis '''
 
