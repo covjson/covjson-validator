@@ -56,9 +56,16 @@ def test_composite_axis_with_4_values(validator, section_domain):
 def test_wrong_composite_axis_type(validator, section_domain):
     ''' Invalid: Section domain with primitive instead of tuple axis '''
 
-    section_domain["axes"]["composite"] = {
-        "values": [1, 2, 3]
-    }
+    section_domain["axes"]["composite"]["values"] = [1, 2, 3]
+    with pytest.raises(ValidationError):
+        validator.validate(section_domain)
+
+
+def test_wrong_composite_axis_coordinates(validator, section_domain):
+    ''' Invalid: Section domain with invalid coordinates '''
+
+    section_domain["axes"]["composite"]["coordinates"] = ["t", "y", "x"]
+    print(section_domain)
     with pytest.raises(ValidationError):
         validator.validate(section_domain)
 
@@ -86,7 +93,3 @@ def test_empty_z_axis(validator, section_domain):
     section_domain["axes"]["z"] = { "values" : [] }
     with pytest.raises(ValidationError):
         validator.validate(section_domain)
-
-
-# TODO test coordinate identifiers of 'composite' axis
-#      to be "t","x","y" (can these be in another order?)
