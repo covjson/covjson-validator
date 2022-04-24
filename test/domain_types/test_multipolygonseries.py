@@ -47,6 +47,14 @@ def test_wrong_composite_axis_type2(validator, multipolygonseries_domain):
         validator.validate(multipolygonseries_domain)
 
 
+def test_wrong_composite_axis_coordinates(validator, multipolygonseries_domain):
+    ''' Invalid: MultiPolygonSeries domain with invalid coordinates '''
+
+    multipolygonseries_domain["axes"]["composite"]["coordinates"] = ["y", "x"]
+    with pytest.raises(ValidationError):
+        validator.validate(multipolygonseries_domain)
+
+
 def test_wrong_data_type(validator, multipolygonseries_domain):
     ''' Invalid: MultiPolygonSeries domain with wrong data type '''
 
@@ -86,6 +94,3 @@ def test_empty_t_axis(validator, multipolygonseries_domain):
     multipolygonseries_domain["axes"]["t"] = { "values" : [] }
     with pytest.raises(ValidationError):
         validator.validate(multipolygonseries_domain)
-
-
-# TODO check coordinates are "x","y"

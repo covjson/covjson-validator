@@ -58,6 +58,14 @@ def test_composite_axis_with_2_values(validator, polygon_domain):
         validator.validate(polygon_domain)
 
 
+def test_wrong_composite_axis_coordinates(validator, polygon_domain):
+    ''' Invalid: Polygon domain with invalid coordinates '''
+
+    polygon_domain["axes"]["composite"]["coordinates"] = ["y", "x"]
+    with pytest.raises(ValidationError):
+        validator.validate(polygon_domain)
+
+
 def test_wrong_data_type(validator, polygon_domain):
     ''' Invalid: Polygon domain with wrong data type '''
 
@@ -105,6 +113,3 @@ def test_multivalued_t_axis(validator, polygon_domain):
     polygon_domain["axes"]["t"] = { "values" : ["2008-01-01T04:00:00Z", "2008-01-01T05:00:00Z"] }
     with pytest.raises(ValidationError):
         validator.validate(polygon_domain)
-
-
-# TODO check coordinates are "x","y"

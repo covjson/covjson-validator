@@ -77,6 +77,14 @@
                                                             "minItems" : 3,
                                                             "maxItems" : 4
                                                         }
+                                                    },
+                                                    "coordinates": 
+                                                    {
+                                                        "enum":
+                                                        [
+                                                            ["t", "x", "y", "z"],
+                                                            ["t", "x", "y"]
+                                                        ]
                                                     }
                                                 }
                                             }
@@ -183,6 +191,14 @@
                                                             "minItems" : 2,
                                                             "maxItems" : 3
                                                         }
+                                                    },
+                                                    "coordinates": 
+                                                    {
+                                                        "enum":
+                                                        [
+                                                            ["x", "y", "z"],
+                                                            ["x", "y"]
+                                                        ]
                                                     }
                                                 }
                                             }
@@ -223,6 +239,14 @@
                                                             "minItems" : 2,
                                                             "maxItems" : 3
                                                         }
+                                                    },
+                                                    "coordinates": 
+                                                    {
+                                                        "enum":
+                                                        [
+                                                            ["x", "y", "z"],
+                                                            ["x", "y"]
+                                                        ]
                                                     }
                                                 }
                                             }
@@ -263,6 +287,10 @@
                                                             "minItems" : 3,
                                                             "maxItems" : 3
                                                         }
+                                                    },
+                                                    "coordinates": 
+                                                    {
+                                                        "const": ["t", "x", "y"]
                                                     }
                                                 }
                                             }
@@ -299,7 +327,8 @@
                                                     {
                                                         "$comment" : "There can only be one polygon in the axis",
                                                         "maxItems" : 1
-                                                    }
+                                                    },
+                                                    "coordinates": { "const" : ["x", "y"] }
                                                 }
                                             }
                                         ]
@@ -336,7 +365,8 @@
                                                     {
                                                         "$comment" : "There can only be one polygon in the axis",
                                                         "maxItems" : 1
-                                                    }
+                                                    },
+                                                    "coordinates": { "const" : ["x", "y"] }
                                                 }
                                             }
                                         ]
@@ -361,7 +391,19 @@
                             {
                                 "properties" :
                                 {
-                                    "composite" : { "$ref": "/schemas/polygonValuesAxis" },
+                                    "composite" :
+                                    { 
+                                        "allOf" :
+                                        [
+                                            { "$ref": "/schemas/polygonValuesAxis" },
+                                            {
+                                                "properties" :
+                                                {
+                                                    "coordinates": { "const" : ["x", "y"] }
+                                                }
+                                            }
+                                        ]
+                                    },
                                     "z" : { "$ref" : "/schemas/numericSingleValueAxis" },
                                     "t" : { "$ref" : "/schemas/stringSingleValueAxis" }
                                 },
@@ -382,7 +424,19 @@
                             {
                                 "properties" :
                                 {
-                                    "composite" : { "$ref": "/schemas/polygonValuesAxis" },
+                                    "composite" :
+                                    {
+                                        "allOf" :
+                                        [
+                                            { "$ref": "/schemas/polygonValuesAxis" },
+                                            {
+                                                "properties" :
+                                                {
+                                                    "coordinates": { "const" : ["x", "y"] }
+                                                }
+                                            }
+                                        ]
+                                    },
                                     "z" : { "$ref" : "/schemas/numericSingleValueAxis" },
                                     "t" : { "$ref" : "/schemas/stringValuesAxis" }
                                 },

@@ -55,6 +55,22 @@ def test_wrong_composite_axis_type(validator, multipointseries_domain):
         validator.validate(multipointseries_domain)
 
 
+def test_wrong_composite_axis_coordinates(validator, multipointseries_domain):
+    ''' Invalid: MultiPointSeries domain with invalid coordinates '''
+
+    multipointseries_domain["axes"]["composite"]["coordinates"] = ["y", "x"]
+    with pytest.raises(ValidationError):
+        validator.validate(multipointseries_domain)
+
+
+def test_wrong_composite_axis_coordinates2(validator, multipointseries_domain):
+    ''' Invalid: MultiPointSeries domain with invalid coordinates '''
+
+    multipointseries_domain["axes"]["composite"]["coordinates"] = ["z", "y", "x"]
+    with pytest.raises(ValidationError):
+        validator.validate(multipointseries_domain)
+
+
 def test_composite_axis_with_1_value(validator, multipointseries_domain):
     ''' Invalid: MultiPointSeries domain with composite axis with tuples of length 1 '''
 
@@ -88,6 +104,4 @@ def test_extra_axis(validator, multipointseries_domain):
         validator.validate(multipointseries_domain)
 
 
-# TODO test coordinate identifiers of 'composite' axis
-#      to be "x","y","z" or "x","y"
 # TODO test that all values in 'composite' axis are valid and consistent tuples

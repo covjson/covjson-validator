@@ -29,6 +29,14 @@ def test_empty_composite_axis(validator, multipolygon_domain):
         validator.validate(multipolygon_domain)
 
 
+def test_wrong_composite_axis_coordinates(validator, multipolygon_domain):
+    ''' Invalid: MultiPolygon domain with invalid coordinates '''
+
+    multipolygon_domain["axes"]["composite"]["coordinates"] = ["y", "x"]
+    with pytest.raises(ValidationError):
+        validator.validate(multipolygon_domain)
+
+
 def test_wrong_composite_axis_type(validator, multipolygon_domain):
     ''' Invalid: MultiPolygon domain with primitive instead of polygon axis '''
 
@@ -94,6 +102,3 @@ def test_multivalued_t_axis(validator, multipolygon_domain):
     multipolygon_domain["axes"]["t"] = { "values" : ["2008-01-01T04:00:00Z", "2008-01-01T05:00:00Z"] }
     with pytest.raises(ValidationError):
         validator.validate(multipolygon_domain)
-
-
-# TODO check coordinates are "x","y", in that order

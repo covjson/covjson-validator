@@ -39,6 +39,22 @@ def test_wrong_composite_axis_type(validator, trajectory_domain):
         validator.validate(trajectory_domain)
 
 
+def test_wrong_composite_axis_coordinates(validator, trajectory_domain):
+    ''' Invalid: Trajectory domain with invalid coordinates '''
+
+    trajectory_domain["axes"]["composite"]["coordinates"] = ["t", "y", "x"]
+    with pytest.raises(ValidationError):
+        validator.validate(trajectory_domain)
+
+
+def test_wrong_composite_axis_coordinates2(validator, trajectory_domain):
+    ''' Invalid: Trajectory domain with invalid coordinates '''
+
+    trajectory_domain["axes"]["composite"]["coordinates"] = ["t", "z", "y", "x"]
+    with pytest.raises(ValidationError):
+        validator.validate(trajectory_domain)
+
+
 def test_composite_axis_with_2_values(validator, trajectory_domain):
     ''' Invalid: Trajectory domain with composite axis with tuples of length 2 '''
 
@@ -88,6 +104,4 @@ def test_multivalued_z_axis(validator, trajectory_domain):
         validator.validate(trajectory_domain)
 
 
-# TODO test coordinate identifiers of 'composite' axis
-#      to be "t","x","y","z" or "t","x","y"
 # TODO test there cannot be both 'z' in 'composite' and a 'z' axis

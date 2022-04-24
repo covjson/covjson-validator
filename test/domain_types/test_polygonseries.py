@@ -39,6 +39,14 @@ def test_wrong_composite_axis_type(validator, polygonseries_domain):
         validator.validate(polygonseries_domain)
 
 
+def test_wrong_composite_axis_coordinates(validator, polygonseries_domain):
+    ''' Invalid: PolygonSeries domain with invalid coordinates '''
+
+    polygonseries_domain["axes"]["composite"]["coordinates"] = ["y", "x"]
+    with pytest.raises(ValidationError):
+        validator.validate(polygonseries_domain)
+
+
 def test_wrong_composite_axis_type2(validator, polygonseries_domain):
     ''' Invalid: PolygonSeries domain with tuple instead of polygon axis (invalid polygons) '''
 
@@ -97,6 +105,3 @@ def test_empty_t_axis(validator, polygonseries_domain):
     polygonseries_domain["axes"]["t"] = { "values" : [] }
     with pytest.raises(ValidationError):
         validator.validate(polygonseries_domain)
-
-
-# TODO check coordinates are "x","y"
