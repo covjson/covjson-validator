@@ -65,7 +65,6 @@ def test_wrong_composite_axis_coordinates(validator, section_domain):
     ''' Invalid: Section domain with invalid coordinates '''
 
     section_domain["axes"]["composite"]["coordinates"] = ["t", "y", "x"]
-    print(section_domain)
     with pytest.raises(ValidationError):
         validator.validate(section_domain)
 

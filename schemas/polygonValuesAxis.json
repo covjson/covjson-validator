@@ -28,7 +28,7 @@
                         "minItems" : 1
                     }
                 },
-                "coordinates": { "const" : ["x", "y"] }
+                "coordinates": { }
             },
             "required" : [ "dataType", "values", "coordinates" ],
             "additionalProperties" : false

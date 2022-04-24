@@ -327,7 +327,8 @@
                                                     {
                                                         "$comment" : "There can only be one polygon in the axis",
                                                         "maxItems" : 1
-                                                    }
+                                                    },
+                                                    "coordinates": { "const" : ["x", "y"] }
                                                 }
                                             }
                                         ]
@@ -364,7 +365,8 @@
                                                     {
                                                         "$comment" : "There can only be one polygon in the axis",
                                                         "maxItems" : 1
-                                                    }
+                                                    },
+                                                    "coordinates": { "const" : ["x", "y"] }
                                                 }
                                             }
                                         ]
@@ -389,7 +391,19 @@
                             {
                                 "properties" :
                                 {
-                                    "composite" : { "$ref": "/schemas/polygonValuesAxis" },
+                                    "composite" :
+                                    { 
+                                        "allOf" :
+                                        [
+                                            { "$ref": "/schemas/polygonValuesAxis" },
+                                            {
+                                                "properties" :
+                                                {
+                                                    "coordinates": { "const" : ["x", "y"] }
+                                                }
+                                            }
+                                        ]
+                                    },
                                     "z" : { "$ref" : "/schemas/numericSingleValueAxis" },
                                     "t" : { "$ref" : "/schemas/stringSingleValueAxis" }
                                 },
@@ -410,7 +424,19 @@
                             {
                                 "properties" :
                                 {
-                                    "composite" : { "$ref": "/schemas/polygonValuesAxis" },
+                                    "composite" :
+                                    {
+                                        "allOf" :
+                                        [
+                                            { "$ref": "/schemas/polygonValuesAxis" },
+                                            {
+                                                "properties" :
+                                                {
+                                                    "coordinates": { "const" : ["x", "y"] }
+                                                }
+                                            }
+                                        ]
+                                    },
                                     "z" : { "$ref" : "/schemas/numericSingleValueAxis" },
                                     "t" : { "$ref" : "/schemas/stringValuesAxis" }
                                 },
