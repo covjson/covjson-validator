@@ -432,6 +432,21 @@
                                   "minItems": 3,
                                   "maxItems": 4
                                 }
+                              },
+                              "coordinates": {
+                                "enum": [
+                                  [
+                                    "t",
+                                    "x",
+                                    "y",
+                                    "z"
+                                  ],
+                                  [
+                                    "t",
+                                    "x",
+                                    "y"
+                                  ]
+                                ]
                               }
                             }
                           }
@@ -582,6 +597,19 @@
                                   "minItems": 2,
                                   "maxItems": 3
                                 }
+                              },
+                              "coordinates": {
+                                "enum": [
+                                  [
+                                    "x",
+                                    "y",
+                                    "z"
+                                  ],
+                                  [
+                                    "x",
+                                    "y"
+                                  ]
+                                ]
                               }
                             }
                           }
@@ -625,6 +653,19 @@
                                   "minItems": 2,
                                   "maxItems": 3
                                 }
+                              },
+                              "coordinates": {
+                                "enum": [
+                                  [
+                                    "x",
+                                    "y",
+                                    "z"
+                                  ],
+                                  [
+                                    "x",
+                                    "y"
+                                  ]
+                                ]
                               }
                             }
                           }
@@ -669,6 +710,13 @@
                                   "minItems": 3,
                                   "maxItems": 3
                                 }
+                              },
+                              "coordinates": {
+                                "const": [
+                                  "t",
+                                  "x",
+                                  "y"
+                                ]
                               }
                             }
                           }
@@ -710,6 +758,12 @@
                               "values": {
                                 "$comment": "There can only be one polygon in the axis",
                                 "maxItems": 1
+                              },
+                              "coordinates": {
+                                "const": [
+                                  "x",
+                                  "y"
+                                ]
                               }
                             }
                           }
@@ -753,6 +807,12 @@
                               "values": {
                                 "$comment": "There can only be one polygon in the axis",
                                 "maxItems": 1
+                              },
+                              "coordinates": {
+                                "const": [
+                                  "x",
+                                  "y"
+                                ]
                               }
                             }
                           }
@@ -787,7 +847,21 @@
                   "axes": {
                     "properties": {
                       "composite": {
-                        "$ref": "#/definitions/polygonValuesAxis"
+                        "allOf": [
+                          {
+                            "$ref": "#/definitions/polygonValuesAxis"
+                          },
+                          {
+                            "properties": {
+                              "coordinates": {
+                                "const": [
+                                  "x",
+                                  "y"
+                                ]
+                              }
+                            }
+                          }
+                        ]
                       },
                       "z": {
                         "$ref": "#/definitions/numericSingleValueAxis"
@@ -818,7 +892,21 @@
                   "axes": {
                     "properties": {
                       "composite": {
-                        "$ref": "#/definitions/polygonValuesAxis"
+                        "allOf": [
+                          {
+                            "$ref": "#/definitions/polygonValuesAxis"
+                          },
+                          {
+                            "properties": {
+                              "coordinates": {
+                                "const": [
+                                  "x",
+                                  "y"
+                                ]
+                              }
+                            }
+                          }
+                        ]
                       },
                       "z": {
                         "$ref": "#/definitions/numericSingleValueAxis"
