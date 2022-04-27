@@ -8,6 +8,7 @@
 import argparse
 import json
 import copy
+from typing import Any
 
 import jsonschema
 
@@ -30,20 +31,26 @@ def walk_dict(obj, match_key, fn):
 def downgrade_schema_to_draft07(root_schema):
     ''' Downgrades a schema to draft-07 JSON Schema dialect '''
 
-    root_schema = copy.deepcopy(root_schema)
-
     schema_key = "$schema"
     if root_schema.get(schema_key) == JSON_SCHEMA_DRAFT_07:
         print("Schema is already in draft-07 dialect")
         return root_schema
 
     # Change dialect declaration
-    root_schema[schema_key] = JSON_SCHEMA_DRAFT_07
+    out: dict[str, Any] = {
+        schema_key: JSON_SCHEMA_DRAFT_07
+    }
+
+    # Copy existing schema without $schema key
+    root_schema = copy.deepcopy(root_schema)
+    if schema_key in root_schema:
+        del root_schema[schema_key]
+    out.update(root_schema)
 
     # Move all "$defs" to top-level "definitions"
     definitions_key = "definitions"
-    assert definitions_key not in root_schema
-    root_schema[definitions_key] = definitions = {}
+    assert definitions_key not in out
+    out[definitions_key] = definitions = {}
 
     defs_key = "$defs"
     id_key = "$id"
@@ -60,8 +67,8 @@ def downgrade_schema_to_draft07(root_schema):
             definitions[name] = schema
         del obj[defs_key]
 
-    walk_dict(root_schema, defs_key, move_defs)
-    root_schema[definitions_key] = dict(sorted(definitions.items()))
+    walk_dict(out, defs_key, move_defs)
+    out[definitions_key] = dict(sorted(definitions.items()))
 
     # Change all "$ref" values to use JSON pointer syntax
     ref_key = "$ref"
@@ -79,7 +86,7 @@ def downgrade_schema_to_draft07(root_schema):
             f"in definitions: {', '.join(definitions.keys())}"
         obj[key] = new_value
 
-    walk_dict(root_schema, ref_key, patch_ref_json_pointer)
+    walk_dict(out, ref_key, patch_ref_json_pointer)
 
     # Ensure "$ref" is not used alongside other keywords,
     # else wrap with "allOf"
@@ -104,7 +111,7 @@ def downgrade_schema_to_draft07(root_schema):
                 del obj[k]
             obj["allOf"] = all_of
 
-    walk_dict(root_schema, ref_key, patch_ref_alone)
+    walk_dict(out, ref_key, patch_ref_alone)
 
     # Rename "dependentSchemas" to "dependencies"
     dependent_schemas_key = "dependentSchemas"
@@ -116,13 +123,13 @@ def downgrade_schema_to_draft07(root_schema):
         obj[dependencies_key] = value
         del obj[dependent_schemas_key]
 
-    walk_dict(root_schema, dependent_schemas_key, patch_dependent_schemas)
+    walk_dict(out, dependent_schemas_key, patch_dependent_schemas)
 
     # Validate against the draft-07 meta schema
     # This will not catch all errors, but it is a good start
-    jsonschema.Draft7Validator.check_schema(root_schema)
+    jsonschema.Draft7Validator.check_schema(out)
 
-    return root_schema
+    return out
 
 
 if __name__ == "__main__":
