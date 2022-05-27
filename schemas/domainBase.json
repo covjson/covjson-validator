@@ -10,6 +10,7 @@
         {
             "type" : "object",
             "description" : "Set of Axis objects, keyed by axis identifier",
+            "minProperties" : 1,
             "patternProperties" :
             {
                 ".+" : { "$ref" : "/schemas/anyAxis" }
