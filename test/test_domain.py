@@ -54,6 +54,14 @@ def test_missing_axes(validator, domain):
         validator.validate(domain)
 
 
+def test_empty_axes(validator, domain):
+    ''' Invalid: Domain with missing "axes" '''
+
+    domain["axes"] = {}
+    with pytest.raises(ValidationError):
+        validator.validate(domain)
+
+
 def test_wrong_axes_type(validator, domain):
     ''' Invalid: Domain with wrong type for "axes" '''
 
