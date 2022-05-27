@@ -31,6 +31,9 @@ jobs:
     - name: Downgrade schema to draft-07
       run: python -m tools.downgrade_schema_to_draft07 dist/schema.json
     
+    - name: Drop $id property
+      run: python -m tools.patch_schema dist/schema.json --drop-id
+    
     - name: Publish to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
