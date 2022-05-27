@@ -31,9 +31,10 @@ https://covjson.org/schema/dev/coveragejson.json.
 The versioned schema for each CoverageJSON specification version is published at:
 https://covjson.org/schema/x.y/coveragejson.json
 
-In addition, the schema is attached to each [release](https://github.com/covjson/covjson-validator/releases) on GitHub. TODO: is this too confusing?
+The in-development schema generated from the latest commit to `main` is published at:
+https://covjson.org/covjson-validator/schema.json
 
-TODO: There's also the CI-generated bundled schema at https://github.com/covjson/covjson-validator/tree/gh-pages for each commit to main. Has to be consolidated somehow.
+In addition, the schema is attached to each [release](https://github.com/covjson/covjson-validator/releases) on GitHub.
 
 ## Publishing the JSON Schema to covjson.org
 
