@@ -1,7 +1,5 @@
 # Pytests to test the referenceSystem.json schema file
 
-# TODO: test that "calendar" is "Gregorian" or a URI
-
 import pytest
 from jsonschema.exceptions import ValidationError
 
@@ -48,6 +46,26 @@ def test_minimal_temporal_rs(validator):
     validator.validate(crs)
 
 
+def test_http_uri_calendar(validator):
+    ''' Tests a TemporalRS with an HTTP URI calendar '''
+
+    crs = {
+        "type" : "TemporalRS",
+        "calendar" : "http://some/calendar"
+    }
+    validator.validate(crs)
+
+
+def test_https_uri_calendar(validator):
+    ''' Tests a TemporalRS with an HTTPS URI calendar '''
+
+    crs = {
+        "type" : "TemporalRS",
+        "calendar" : "https://some/calendar"
+    }
+    validator.validate(crs)
+
+
 def test_identifier_rs(validator):
     ''' Tests an example of an IdentifierRS '''
 
@@ -85,6 +103,17 @@ def test_missing_calendar(validator):
     ''' Tests a TemporalRS with a missing calendar '''
 
     crs = { "type" : "TemporalRS" }
+    with pytest.raises(ValidationError):
+        validator.validate(crs)
+
+
+def test_unknown_non_uri_calendar(validator):
+    ''' Tests a TemporalRS with a missing calendar '''
+
+    crs = {
+        "type" : "TemporalRS",
+        "calendar" : "Julian"
+    }
     with pytest.raises(ValidationError):
         validator.validate(crs)
 

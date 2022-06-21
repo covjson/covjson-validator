@@ -15,7 +15,15 @@
                 "description" : "Temporal reference system",
                 "properties" :
                 {
-                    "calendar" : { "type" : "string" },
+                    "calendar" : 
+                    {
+                        "type" : "string",
+                        "oneOf" :
+                        [
+                            { "const" : "Gregorian" },
+                            { "pattern": "^https?://" }
+                        ]
+                    },
                     "timeScale" : { "type" : "string" }
                 },
                 "required" : [ "calendar" ]
