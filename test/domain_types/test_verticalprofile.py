@@ -85,7 +85,6 @@ def test_multivalued_y_axis(validator, verticalprofile_domain):
         validator.validate(verticalprofile_domain)
 
 
-# TODO: this is not explicity forbidden in the spec, but should be - see #96
 def test_multivalued_t_axis(validator, verticalprofile_domain):
     ''' Invalid: VerticalProfile domain with multi-valued 't' axis '''
 
