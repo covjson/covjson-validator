@@ -61,27 +61,12 @@ def test_empty_t_axis(validator, grid_domain):
         validator.validate(grid_domain)
 
 
-def test_extra_multi_coordinate_axis(validator, grid_domain):
-    ''' Invalid: Grid domain with unrecognised multi-coordinate axis '''
+def test_extra_coordinate_axis(validator, grid_domain):
+    ''' Invalid: Grid domain with unrecognised axis '''
 
     grid_domain["axes"]["x2"] = grid_domain["axes"]["x"]
     with pytest.raises(ValidationError):
         validator.validate(grid_domain)
-
-
-# TODO the schema forbids this currently, but the spec allows it
-# def test_extra_single_coordinate_axis(validator, grid_domain):
-#     ''' Valid: Grid domain with unrecognised single-coordinate axis '''
-
-#     grid_domain["axes"]["x2"] = { "values": [1] }
-#     grid_domain["referencing"].append({
-#         "coordinates": ["x2"],
-#         "system": {
-#             "type": "GeographicCRS",
-#             "id": "http://foo"
-#         }
-#     })
-#     validator.validate(grid_domain)
 
 
 def test_wrong_x_axis_type_with_no_domain_type(validator, grid_domain):
