@@ -1,8 +1,8 @@
-# CoverageJSON Validator (Work In Progress)
+# CoverageJSON Validator
 
-This repo contains JSON schema and associated Python code for validating [CoverageJSON](https://covjson.org) documents.
+This repository contains JSON Schema and associated Python code for validating [CoverageJSON](https://covjson.org) documents.
 
-Note that this work is in active development and the validation functionality is not complete. There have been no releases yet.
+Note that this work is in active development and the validation functionality is currently limited to what can be expressed using JSON Schema. 
 
 ## Setup
  1. Install a Python environment with pip (version x or above), e.g. using conda (`conda create -n covjson-validator pip`)
