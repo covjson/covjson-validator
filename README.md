@@ -16,6 +16,12 @@ N.B. Make sure to install requirements via `pip`, not `conda` (at the time of wr
 python -m tools.validator my.covjson
 ```
 
+To test a server/api response, specify that the file source is an URL using the `--source` flag. Its default value is `file`
+
+```sh
+python -m tools.validator --source=url "https://mydomain.com/collections/cov"
+```
+
 ## Testing the validator
 ```sh
 python -m pytest
