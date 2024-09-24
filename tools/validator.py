@@ -46,12 +46,22 @@ def create_custom_validator(schema_id, schema_store=None):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
+    parser.add_argument('--source', type=str, choices=['url', 'file'], default='file', help='Source of the CoverageJSON document')
     parser.add_argument('covjson_path', type=str,
                         help='Path to CoverageJSON document')
+    
     args = parser.parse_args()
 
-    with open(args.covjson_path, encoding="utf-8") as f:
-        obj = json.load(f)
+    if args.source == 'url':
+        import requests
+        # Get the file from the URL
+        response = requests.get(args.covjson_path)
+        response.raise_for_status()  # Raise an exception if the request was unsuccessful
+        obj = response.json()
+    else:
+        # Assume the covjson_path is a local file
+        with open(args.covjson_path, encoding="utf-8") as f:
+            obj = json.load(f)
 
     validator = create_custom_validator("/schemas/coveragejson")
     validator.validate(obj)
