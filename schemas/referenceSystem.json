@@ -39,32 +39,18 @@
                     "id" : { "type" : "string" },
                     "label" : { "$ref" : "/schemas/i18n" },
                     "description" : { "$ref" : "/schemas/i18n" },
-                    "targetConcept" : { "$ref" : "#/$defs/targetConcept" },
+                    "targetConcept" : { "$ref" : "/schemas/targetConcept" },
                     "identifiers" :
                     {
                         "type" : "object",
                         "patternProperties" :
                         {
-                            ".+" : { "$ref" : "#/$defs/targetConcept" }
+                            ".+" : { "$ref" : "/schemas/targetConcept" }
                         }
                     }
                 },
                 "required" : [ "targetConcept" ]
             }
         }
-    ],
-    "$defs" :
-    {
-        "targetConcept" :
-        {
-            "type" : "object",
-            "properties" :
-            {
-                "id" : { "type" : "string" },
-                "label" : { "$ref" : "/schemas/i18n" },
-                "description" : { "$ref" : "/schemas/i18n" }
-            },
-            "required" : [ "label" ]
-        }
-    }
+    ]
 }
