@@ -1516,7 +1516,7 @@
       ]
     },
     "targetConcept": {
-      "type": "object",
+      "description": "A concept in an identifier-based reference system",
       "properties": {
         "id": {
           "type": "string"
